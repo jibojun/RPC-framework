@@ -9,4 +9,5 @@ import java.io.IOException;
  */
 public interface ObjectOutput {
     void writeObject() throws IOException;
+    byte[] writeObjectAndReturn() throws IOException;
 }

@@ -83,6 +83,26 @@
             <artifactId>protostuff-core</artifactId>
             <version>1.6.0</version>
         </dependency>
+        <dependency>
+            <groupId>io.protostuff</groupId>
+            <artifactId>protostuff-api</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.protostuff</groupId>
+            <artifactId>protostuff-runtime</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.protostuff</groupId>
+            <artifactId>protostuff-collectionschema</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.protostuff</groupId>
+            <artifactId>protostuff-json</artifactId>
+            <version>1.6.0</version>
+        </dependency>
         <!--fastjson-->
         <dependency>
             <groupId>com.alibaba</groupId>
