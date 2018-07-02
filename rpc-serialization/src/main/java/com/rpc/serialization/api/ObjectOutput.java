@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /**
  * @Author: Bojun Ji
- * @Description: write object
+ * @Description: write object,serialization
  * @Date: 2018/6/30_6:07 PM
  */
 public interface ObjectOutput {

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /**
  * @Author: Bojun Ji
- * @Description: read object
+ * @Description: read object,deserialization
  * @Date: 2018/6/30_6:07 PM
  */
 public interface ObjectInput {
