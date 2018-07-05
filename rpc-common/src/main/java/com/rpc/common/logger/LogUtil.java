@@ -8,22 +8,22 @@ import org.slf4j.LoggerFactory;
  * @Date: Created in 2018-07-02 10:40
  * @Description:
  */
-public class Log4jLogger {
-    private final Logger logger = LoggerFactory.getLogger(Log4jLogger.class);
+public class LogUtil {
+    private final static Logger logger = LoggerFactory.getLogger(LogUtil.class);
 
-    public void logDebug(String msg){
+    public static void logDebug(String msg){
         logger.debug(msg);
     }
 
-    public void logInfo(String msg){
+    public static void logInfo(String msg){
         logger.info(msg);
     }
 
-    public void logWarn(String msg){
+    public static void logWarn(String msg){
         logger.warn(msg);
     }
 
-    public void logError(String msg){
+    public static void logError(String msg){
         logger.error(msg);
     }
 
