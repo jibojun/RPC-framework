@@ -5,6 +5,7 @@ import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -17,16 +18,16 @@ public class ProtoStuffObjectInput implements ObjectInput {
 
     private final Schema schema;
     //input
-    private final InputStream is;
+    private final byte[] data;
 
-    public ProtoStuffObjectInput(Class cls,InputStream is){
+    public ProtoStuffObjectInput(Class cls,byte[] data){
         this.schema=RuntimeSchema.getSchema(cls);
-        this.is=is;
+        this.data=data;
     }
 
 
     public Object readObject(Object object) throws IOException, ClassNotFoundException {
-        ProtostuffIOUtil.mergeFrom(this.is, object, this.schema);
+        ProtostuffIOUtil.mergeFrom(this.data, object, this.schema);
         return object;
     }
 
@@ -34,7 +35,7 @@ public class ProtoStuffObjectInput implements ObjectInput {
         T object= null;
         try {
             object = cls.newInstance();
-            ProtostuffIOUtil.mergeFrom(this.is, object, this.schema);
+            ProtostuffIOUtil.mergeFrom(this.data, object, this.schema);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
