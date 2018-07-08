@@ -6,9 +6,7 @@ package com.rpc.common.configuration;
  * @Description: connection configuration
  */
 public enum ConnectionEnum {
-    SERVER_IP("127.0.0.1"),
-    SERVER_PORT("9999"),
-    SERVER_CONNECTION_NUMER(String.valueOf(1024 * 1024));
+    SERVER_CONNECTION_NUMBER(String.valueOf(1024 * 1024));
 
     private String configuredValue;
 

@@ -1,20 +1,13 @@
 package com.rpc.transport.server;
 
-import com.rpc.common.configuration.ConnectionEnum;
+import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.logger.LogUtil;
-
-import java.io.ObjectInput;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
 import com.rpc.common.rpc.RPCRequest;
-import com.rpc.serialization.protostuff.ProtoStuffObjectInput;
-import io.netty.bootstrap.ServerBootstrap;
+import com.rpc.common.rpc.RPCResponse;
 import io.netty.channel.*;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 
 /**
@@ -34,44 +27,15 @@ public class ServerDataHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         RPCRequest request=(RPCRequest)msg;
-        //accept connection group
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        //detailed event handler group
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            ServerBootstrap bootstrap = new ServerBootstrap();
-            //use nio, non-blocking
-            bootstrap.channel(NioServerSocketChannel.class);
-            //bind groups
-            bootstrap.group(bossGroup, workerGroup);
-            //configuration， no delay for TCP transfer,
-            bootstrap.option(ChannelOption.TCP_NODELAY, true);
-            //configuration, connection number,
-            bootstrap.option(ChannelOption.SO_BACKLOG, 1024 * 1024);
-            //configuration, connection keep alive, after acceptor accept the channel
-            bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
-
-            //new connection handler
-            bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                protected void initChannel(SocketChannel sc) throws Exception {
-                    // task handling
-                    ChannelPipeline pipeline = sc.pipeline();
-                    //pipeline.addLast(new MessageDecoder(), new MessageEncoder(), new NettyServerHandler());
-                }
-            });
-
-            ChannelFuture f = bootstrap.bind(ConnectionEnum.SERVER_PORT.getIntValue()).sync();
-            if (f.isSuccess()) {
-                //log.info("long connection started success");
-            } else {
-                //log.error("long connection started fail");
-
-            }
-        } finally{
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
+        RPCResponse response=new RPCResponse();
+        try{
+            response.setRequestId(request.getRequestId());
+            response.setResult(handleRequest(request));
+        }catch (Exception e){
+            response.setError(e);
+            LogUtil.logError(LogTipEnum.SERVER_HANDLE_ERROR_LOG_TIP+e.getMessage());
         }
+        ctx.write(response);
     }
 
     @Override
