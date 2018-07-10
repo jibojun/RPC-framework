@@ -37,8 +37,8 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
                         public void initChannel(SocketChannel channel)
                                 throws Exception {
                             channel.pipeline()
-//                                    .addLast(new MessageEncoder(RPCRequest.class))
-//                                    .addLast(new MessageDecoder(RPCResponse.class))
+                                    .addLast(new MessageEncoder(RPCRequest.class))
+                                    .addLast(new MessageDecoder(RPCResponse.class))
                                     .addLast(ClientDataHandler.this);
                         }
                     }).option(ChannelOption.SO_KEEPALIVE, true);

@@ -1,10 +1,12 @@
-package com.rpc.service.server;
+package com.rpc.server;
 
 import com.google.common.base.Splitter;
 import com.rpc.common.configuration.CharEnum;
 import com.rpc.common.configuration.ConnectionEnum;
 import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.logger.LogUtil;
+import com.rpc.common.rpc.RPCRequest;
+import com.rpc.common.rpc.RPCResponse;
 import com.rpc.transport.codec.MessageDecoder;
 import com.rpc.transport.codec.MessageEncoder;
 import com.rpc.transport.server.ServerDataHandler;
@@ -70,9 +72,9 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
                 protected void initChannel(SocketChannel sc) throws Exception {
                     // add handlers to pipeline for inbound and outbound
                     ChannelPipeline pipeline = sc.pipeline();
-                    pipeline.addLast("1",new MessageDecoder());//decoder,inbound
+                    pipeline.addLast("1",new MessageDecoder(RPCRequest.class));//decoder,inbound
                     pipeline.addLast("2",new ServerDataSender());//outbound, send result back to client side
-                    pipeline.addLast("3",new MessageEncoder());//encoder,outbound
+                    pipeline.addLast("3",new MessageEncoder(RPCResponse.class));//encoder,outbound
                     pipeline.addLast("4",new ServerDataHandler(serviceMap));//inbound, receive and handle data
                 }
             });

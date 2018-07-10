@@ -13,7 +13,7 @@
         <module>rpc-registry</module>
         <module>rpc-client</module>
         <module>rpc-serialization</module>
-        <module>rpc-service</module>
+        <module>rpc-server</module>
         <module>rpc-common</module>
         <module>rpc-transport</module>
         <module>rpc-boot</module>
