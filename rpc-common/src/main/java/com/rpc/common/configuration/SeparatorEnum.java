@@ -5,12 +5,12 @@ package com.rpc.common.configuration;
  * @Description:
  * @Date: 2018/7/8_6:05 PM
  */
-public enum CharEnum {
+public enum SeparatorEnum {
     ADDRESS_SEPARATOR(":");
 
     private String value;
 
-    CharEnum(String value){
+    SeparatorEnum(String value){
         this.value=value;
     }
 

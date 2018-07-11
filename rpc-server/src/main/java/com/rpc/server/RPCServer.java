@@ -1,7 +1,7 @@
 package com.rpc.server;
 
 import com.google.common.base.Splitter;
-import com.rpc.common.configuration.CharEnum;
+import com.rpc.common.configuration.SeparatorEnum;
 import com.rpc.common.configuration.ConnectionEnum;
 import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.logger.LogUtil;
@@ -34,7 +34,7 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
     private Map<String, Object> serviceMap=new HashMap();
 
     public RPCServer(String address){
-        Iterator<String> result=Splitter.on(CharEnum.ADDRESS_SEPARATOR.getValue()).omitEmptyStrings().trimResults().split(address).iterator();
+        Iterator<String> result=Splitter.on(SeparatorEnum.ADDRESS_SEPARATOR.getValue()).omitEmptyStrings().trimResults().split(address).iterator();
         int count =0;
         while(result.hasNext()&&count<=1){
             if(count==0){
@@ -81,7 +81,7 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
 
             //bind
             ChannelFuture f = bootstrap.bind(this.host,this.port).sync();
-            LogUtil.logInfo(LogTipEnum.SERVER_START_LOG_TIP+this.host+CharEnum.ADDRESS_SEPARATOR+this.port);
+            LogUtil.logInfo(LogTipEnum.SERVER_START_LOG_TIP+this.host+SeparatorEnum.ADDRESS_SEPARATOR+this.port);
 
             //register
 

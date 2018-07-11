@@ -3,6 +3,7 @@ package com.rpc.transport.codec;
 import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.logger.LogUtil;
 import com.rpc.serialization.api.ObjectInput;
+import com.rpc.serialization.factory.SerializerFactory;
 import com.rpc.serialization.protostuff.ProtoStuffObjectInput;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -38,7 +39,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
         //deserialization
         byte[] data = new byte[dataSize];
         in.readBytes(data);
-        ObjectInput input=new ProtoStuffObjectInput(genericClass,data);
+        ObjectInput input=SerializerFactory.getDeserializer(genericClass,data);
         Object obj = input.readObject(genericClass);
         out.add(obj);
     }

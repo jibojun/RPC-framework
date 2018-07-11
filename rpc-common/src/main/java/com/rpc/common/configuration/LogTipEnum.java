@@ -7,9 +7,11 @@ package com.rpc.common.configuration;
  */
 public enum LogTipEnum {
     SERVER_START_LOG_TIP("server started on :"),
-    SERVER_HANDLE_ERROR_LOG_TIP("error when handle request and return response, deatiled message is:"),
+    SERVER_HANDLE_ERROR_LOG_TIP("error when handle request and return response, detailed message is:"),
     SERVER_SEND_LOG_TIP("sending result to client side"),
-    SERVER_EMPTY_DATA_ERROR_LOG_TIP("data from client is empty"),;
+    SERVER_EMPTY_DATA_ERROR_LOG_TIP("data from client is empty"),
+    DESERIALIZATION_ERROR_TIP("error happened in deserialization, detailed message is:"),
+    SERIALIZATION_ERROR_TIP("error happened in serialization, detailed message is:");
 
     private String configuredValue;
 
