@@ -7,6 +7,9 @@ import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.logger.LogUtil;
 import com.rpc.common.rpc.RPCRequest;
 import com.rpc.common.rpc.RPCResponse;
+import com.rpc.registry.api.ServiceRegistry;
+import com.rpc.registry.zookeeper.ZKServiceRegistry;
+import com.rpc.server.annotation.ServerService;
 import com.rpc.transport.codec.MessageDecoder;
 import com.rpc.transport.codec.MessageEncoder;
 import com.rpc.transport.server.ServerDataHandler;
@@ -20,6 +23,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+
 import java.util.*;
 import java.util.Iterator;
 
@@ -29,11 +33,15 @@ import java.util.Iterator;
  * @Date: 2018/7/6_1:08 AM
  */
 public class RPCServer implements ApplicationContextAware, InitializingBean {
+    private String address;
     private String host;
     private int port;
     private Map<String, Object> serviceMap=new HashMap();
+    private ServiceRegistry registry=new ZKServiceRegistry();
 
     public RPCServer(String address){
+        this.address=address;
+        //get host and port from address
         Iterator<String> result=Splitter.on(SeparatorEnum.ADDRESS_SEPARATOR.getValue()).omitEmptyStrings().trimResults().split(address).iterator();
         int count =0;
         while(result.hasNext()&&count<=1){
@@ -45,7 +53,6 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
             }
         }
     }
-
 
     //server start up
     public void afterPropertiesSet() throws Exception {
@@ -83,8 +90,8 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
             ChannelFuture f = bootstrap.bind(this.host,this.port).sync();
             LogUtil.logInfo(LogTipEnum.SERVER_START_LOG_TIP+this.host+SeparatorEnum.ADDRESS_SEPARATOR+this.port);
 
-            //register
-
+            //register service
+            registry.registerService(address);
 
 
             if (f.isSuccess()) {
@@ -101,7 +108,16 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
 
     //get service class info from service annotation, build service map
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-
+        //get service bean map of the service annotation
+        Map<String, Object> serviceBeanMap = applicationContext
+                .getBeansWithAnnotation(ServerService.class);
+        //if there is services, get class info to set key, use the bean to set value in service map
+        if (!serviceBeanMap.isEmpty()) {
+            for (Object serviceBean : serviceBeanMap.values()) {
+                serviceMap.put(serviceBean.getClass()
+                        .getAnnotation(ServerService.class).value().getName(), serviceBean);
+            }
+        }
     }
 
 }
