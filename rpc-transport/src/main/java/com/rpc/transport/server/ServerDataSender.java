@@ -11,7 +11,7 @@ import io.netty.channel.*;
  */
 public class ServerDataSender extends ChannelOutboundHandlerAdapter {
 
-    //send result back to cliet side
+    //listen to outbound event(read, write etc), flush to do real IO operation and send result back to client side
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
         LogUtil.logInfo(LogTipEnum.SERVER_SEND_LOG_TIP.getConfiguredValue());
