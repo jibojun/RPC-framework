@@ -6,7 +6,9 @@ package com.rpc.common.configuration;
  * @Date: 2018/7/8_6:05 PM
  */
 public enum SeparatorEnum {
-    ADDRESS_SEPARATOR(":");
+    ADDRESS_SEPARATOR(":"),
+    URL_SEPARATOR("/");
+
 
     private String value;
 

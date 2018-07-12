@@ -11,7 +11,10 @@ public enum LogTipEnum {
     SERVER_SEND_LOG_TIP("sending result to client side"),
     SERVER_EMPTY_DATA_ERROR_LOG_TIP("data from client is empty"),
     DESERIALIZATION_ERROR_TIP("error happened in deserialization, detailed message is:"),
-    SERIALIZATION_ERROR_TIP("error happened in serialization, detailed message is:");
+    SERIALIZATION_ERROR_TIP("error happened in serialization, detailed message is:"),
+    DISCOVERY_SELECT_ONE_NODE("use the only data node:"),
+    DISCOVERY_SELECT_RANDOM_NODE("use random data node:"),
+    ZK_REGISTER_SERVICE_ERROR("error happened when register service,detailed error message is:");
 
     private String configuredValue;
 

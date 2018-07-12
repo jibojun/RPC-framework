@@ -1,6 +1,8 @@
 package com.rpc.registry.zookeeper;
 
+import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.configuration.ZooKeeperConfigurationEnum;
+import com.rpc.common.logger.LogUtil;
 import com.rpc.registry.api.ServiceRegistry;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
@@ -10,7 +12,7 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 /**
  * @Author: Bojun Ji
  * @Date: Created in 2018-07-11 17:11
- * @Description:
+ * @Description: service registry
  */
 public class ZKServiceRegistry implements ServiceRegistry {
     private static CuratorFramework zkClient;
@@ -25,20 +27,17 @@ public class ZKServiceRegistry implements ServiceRegistry {
     public void registerService(String serverAddress) {
         //if server address is not null, connect ZK server and create data node for this service
         if (serverAddress != null) {
-
-        }
-    }
-
-    public void createDataNode(String serverAddress) {
-        try {
-            byte[] data = serverAddress.getBytes();
-            if (zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue())==null) {
-                zkClient.create().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue(),null);
+            try {
+                byte[] data = serverAddress.getBytes();
+                //if no registry node, create one
+                if (zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue())==null) {
+                    zkClient.create().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue(),null);
+                }
+                //data node
+                zkClient.create().forPath(ZooKeeperConfigurationEnum.ZK_DATA_PATH.getValue(),data);
+            }catch(Exception e){
+                LogUtil.logError(LogTipEnum.ZK_REGISTER_SERVICE_ERROR+e.getMessage());
             }
-            //data node
-            zkClient.create().forPath(ZooKeeperConfigurationEnum.ZK_DATA_PATH.getValue(),data);
-        }catch(Exception e){
-
         }
     }
 }

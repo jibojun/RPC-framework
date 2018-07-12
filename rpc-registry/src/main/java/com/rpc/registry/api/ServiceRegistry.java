@@ -7,5 +7,4 @@ package com.rpc.registry.api;
  */
 public interface ServiceRegistry {
     void registerService(String serverAddress);
-    void createDataNode(String data);
 }
