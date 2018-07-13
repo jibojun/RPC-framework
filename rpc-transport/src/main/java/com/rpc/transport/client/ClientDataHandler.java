@@ -1,5 +1,7 @@
 package com.rpc.transport.client;
 
+import com.google.common.base.Splitter;
+import com.rpc.common.configuration.SeparatorEnum;
 import com.rpc.common.logger.LogUtil;
 import com.rpc.common.rpc.RPCRequest;
 import com.rpc.common.rpc.RPCResponse;
@@ -11,6 +13,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.util.Iterator;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -21,11 +24,25 @@ import java.util.concurrent.locks.ReentrantLock;
  * @Date: 2018/7/6_1:25 AM
  */
 public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> {
-    private String hostAddress;
+    private String host;
     private int port;
     private RPCResponse response;
     private Lock lock=new ReentrantLock();
     private Condition condition=lock.newCondition();
+
+    public ClientDataHandler(String serverAddress){
+        //get host and port from address
+        Iterator<String> result=Splitter.on(SeparatorEnum.ADDRESS_SEPARATOR.getValue()).omitEmptyStrings().trimResults().split(serverAddress).iterator();
+        int count =0;
+        while(result.hasNext()&&count<=1){
+            if(count==0){
+                this.host=result.next();
+                count++;
+            }else if(count==1){
+                this.port=Integer.getInteger(result.next());
+            }
+        }
+    }
 
     public RPCResponse sendRequest(RPCRequest request) throws Exception {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -43,10 +60,10 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
                         }
                     }).option(ChannelOption.SO_KEEPALIVE, true);
             // connect and send request to server
-            ChannelFuture future = bootstrap.connect(hostAddress, port).sync();
+            ChannelFuture future = bootstrap.connect(host, port).sync();
             future.channel().writeAndFlush(request).sync();
 
-            //wait until channel read get new event of returned message
+            //sync, wait until channel read get new event of returned message
             lock.lock();
             condition.await();
 
@@ -81,12 +98,12 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
         ctx.close();
     }
 
-    public String getHostAddress() {
-        return hostAddress;
+    public String getHost() {
+        return host;
     }
 
-    public void setHostAddress(String hostAddress) {
-        this.hostAddress = hostAddress;
+    public void setHost(String host) {
+        this.host = host;
     }
 
     public int getPort() {

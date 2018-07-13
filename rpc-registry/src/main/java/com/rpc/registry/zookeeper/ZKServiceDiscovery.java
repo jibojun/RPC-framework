@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ZKServiceDiscovery implements ServiceDiscovery {
     private static CuratorFramework zkClient;
     //list to store address info from ZK
-    private volatile static List<String> addressList=new ArrayList<>();
+    private volatile static List<String> addressList= new ArrayList<>();
 
     static{
         //init ZK client, assign retry configuration, connect ZK server by curator
@@ -32,9 +32,13 @@ public class ZKServiceDiscovery implements ServiceDiscovery {
         zkClient.start();
     }
 
-    public ZKServiceDiscovery() throws Exception {
-        //watch registry node's children
-        addWatch(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue(),false);
+    public ZKServiceDiscovery() {
+        try {
+            //watch registry node's children
+            addWatch(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue(), false);
+        }catch (Exception e){
+            LogUtil.logError(e.getMessage());
+        }
     }
 
     //discover and get node in node list
