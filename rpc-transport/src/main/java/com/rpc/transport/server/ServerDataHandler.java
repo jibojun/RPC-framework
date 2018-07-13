@@ -35,6 +35,7 @@ public class ServerDataHandler extends ChannelInboundHandlerAdapter {
             response.setError(e);
             LogUtil.logError(LogTipEnum.SERVER_HANDLE_ERROR_LOG_TIP+e.getMessage());
         }
+        //write event
         ctx.write(response);
     }
 
