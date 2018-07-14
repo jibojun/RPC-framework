@@ -1,5 +1,6 @@
 package com.rpc.server.annotation;
 
+import com.rpc.common.configuration.ConnectionEnum;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.ElementType;

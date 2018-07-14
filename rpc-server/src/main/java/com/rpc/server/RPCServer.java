@@ -1,6 +1,5 @@
 package com.rpc.server;
 
-import com.google.common.base.Splitter;
 import com.rpc.common.configuration.SeparatorEnum;
 import com.rpc.common.configuration.ConnectionEnum;
 import com.rpc.common.configuration.LogTipEnum;
@@ -24,8 +23,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import java.net.InetAddress;
 import java.util.*;
-import java.util.Iterator;
 
 /**
  * @Author: Bojun Ji
@@ -33,26 +32,8 @@ import java.util.Iterator;
  * @Date: 2018/7/6_1:08 AM
  */
 public class RPCServer implements ApplicationContextAware, InitializingBean {
-    private String address;
-    private String host;
-    private int port;
     private Map<String, Object> serviceMap=new HashMap();
     private ServiceRegistry registry=new ZKServiceRegistry();
-
-    public RPCServer(String address){
-        this.address=address;
-        //get host and port from address
-        Iterator<String> result=Splitter.on(SeparatorEnum.ADDRESS_SEPARATOR.getValue()).omitEmptyStrings().trimResults().split(address).iterator();
-        int count =0;
-        while(result.hasNext()&&count<=1){
-            if(count==0){
-                this.host=result.next();
-                count++;
-            }else if(count==1){
-                this.port=Integer.getInteger(result.next());
-            }
-        }
-    }
 
     //server start up
     public void afterPropertiesSet() throws Exception {
@@ -87,22 +68,23 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
             });
 
             //bind
-            ChannelFuture f = bootstrap.bind(this.host,this.port).sync();
-            LogUtil.logInfo(LogTipEnum.SERVER_START_LOG_TIP+this.host+SeparatorEnum.ADDRESS_SEPARATOR+this.port);
+            String host=InetAddress.getLocalHost().getHostAddress();
+            int port=ConnectionEnum.SERVER_DEFAULT_EXPORT_PORT.getIntValue();
+            ChannelFuture f = bootstrap.bind(host,port);
+            LogUtil.logInfo(LogTipEnum.SERVER_START_LOG_TIP+host+SeparatorEnum.ADDRESS_SEPARATOR+port);
 
             //register service
-            registry.registerService(address);
-
+            registry.registerService(host+SeparatorEnum.ADDRESS_SEPARATOR+port);
 
             if (f.isSuccess()) {
-                //log.info("long connection started success");
+                LogUtil.logInfo("long connection started successfully");
             } else {
-                //log.error("long connection started fail");
+                LogUtil.logError("long connection started failed");
 
             }
         } finally{
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
+//            bossGroup.shutdownGracefully();
+//            workerGroup.shutdownGracefully();
         }
     }
 

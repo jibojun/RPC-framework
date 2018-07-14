@@ -6,6 +6,7 @@ package com.rpc.common.configuration;
  * @Description: connection configuration
  */
 public enum ConnectionEnum {
+    SERVER_DEFAULT_EXPORT_PORT(String.valueOf(9999)),
     SERVER_CONNECTION_NUMBER(String.valueOf(1024 * 1024));
 
     private String configuredValue;
