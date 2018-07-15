@@ -22,6 +22,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
 import java.util.*;
@@ -31,6 +32,7 @@ import java.util.*;
  * @Description: RPC server side start up
  * @Date: 2018/7/6_1:08 AM
  */
+@Component
 public class RPCServer implements ApplicationContextAware, InitializingBean {
     private Map<String, Object> serviceMap=new HashMap();
     private ServiceRegistry registry=new ZKServiceRegistry();
