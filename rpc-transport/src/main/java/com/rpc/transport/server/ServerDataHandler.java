@@ -2,6 +2,7 @@ package com.rpc.transport.server;
 
 import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.logger.LogUtil;
+
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -20,20 +21,20 @@ public class ServerDataHandler extends ChannelInboundHandlerAdapter {
     private Map<String, Object> serviceMap;
 
     public ServerDataHandler(Map<String, Object> serviceMap) {
-        this.serviceMap=serviceMap;
+        this.serviceMap = serviceMap;
     }
 
     //handle data from client
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        RPCRequest request=(RPCRequest)msg;
-        RPCResponse response=new RPCResponse();
-        try{
+        RPCRequest request = (RPCRequest) msg;
+        RPCResponse response = new RPCResponse();
+        try {
             response.setRequestId(request.getRequestId());
             response.setResult(handleRequest(request));
-        }catch (Exception e){
+        } catch (Exception e) {
             response.setError(e);
-            LogUtil.logError(LogTipEnum.SERVER_HANDLE_ERROR_LOG_TIP+e.getMessage());
+            LogUtil.logError(ServerDataHandler.class, LogTipEnum.SERVER_HANDLE_ERROR_LOG_TIP + e.getMessage());
         }
         //write event
         ctx.write(response);
@@ -42,7 +43,7 @@ public class ServerDataHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         // Close the connection when an exception is raised
-        LogUtil.logError(cause.getMessage());
+        LogUtil.logError(ServerDataHandler.class, cause.getMessage());
         ctx.close();
     }
 

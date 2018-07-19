@@ -12,8 +12,8 @@ public enum SerializationConfigurationEnum {
 
     private int value;
 
-    SerializationConfigurationEnum(int value){
-        this.value=value;
+    SerializationConfigurationEnum(int value) {
+        this.value = value;
     }
 
     public int getValue() {

@@ -1,5 +1,6 @@
 package com.rpc.common.logger;
 
+import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,21 +10,24 @@ import org.slf4j.LoggerFactory;
  * @Description:
  */
 public class LogUtil {
-    private final static Logger logger = LoggerFactory.getLogger(LogUtil.class);
 
-    public static void logDebug(String msg){
+    public static void logDebug(Class cls, String msg) {
+        Logger logger = LoggerFactory.getLogger(cls);
         logger.debug(msg);
     }
 
-    public static void logInfo(String msg){
+    public static void logInfo(Class cls, String msg) {
+        Logger logger = LoggerFactory.getLogger(cls);
         logger.info(msg);
     }
 
-    public static void logWarn(String msg){
+    public static void logWarn(Class cls, String msg) {
+        Logger logger = LoggerFactory.getLogger(cls);
         logger.warn(msg);
     }
 
-    public static void logError(String msg){
+    public static void logError(Class cls, String msg) {
+        Logger logger = LoggerFactory.getLogger(cls);
         logger.error(msg);
     }
 

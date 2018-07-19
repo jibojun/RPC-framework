@@ -23,28 +23,28 @@ public class ProtoStuffObjectInput implements ObjectInput {
     private final byte[] data;
     private static Objenesis objenesis = new ObjenesisStd(true);
 
-    public ProtoStuffObjectInput(Class cls,byte[] data){
-        this.schema=RuntimeSchema.getSchema(cls);
-        this.data=data;
+    public ProtoStuffObjectInput(Class cls, byte[] data) {
+        this.schema = RuntimeSchema.getSchema(cls);
+        this.data = data;
     }
 
     public Object readObject(Object object) {
         try {
             ProtostuffIOUtil.mergeFrom(this.data, object, this.schema);
-        }catch (Exception e){
-            LogUtil.logError(LogTipEnum.DESERIALIZATION_ERROR_TIP+e.getMessage());
+        } catch (Exception e) {
+            LogUtil.logError(ProtoStuffObjectInput.class, LogTipEnum.DESERIALIZATION_ERROR_TIP + e.getMessage());
         }
         return object;
     }
 
     public <T> T readObject(Class<T> cls) {
-        T object=null;
+        T object = null;
         try {
             //create instance, but need to avoid situation that no constructor method without any parameter
             object = objenesis.newInstance(cls);
             ProtostuffIOUtil.mergeFrom(this.data, object, this.schema);
         } catch (Exception e) {
-            LogUtil.logError(LogTipEnum.DESERIALIZATION_ERROR_TIP+e.getMessage());
+            LogUtil.logError(ProtoStuffObjectInput.class, LogTipEnum.DESERIALIZATION_ERROR_TIP + e.getMessage());
         }
         return object;
     }

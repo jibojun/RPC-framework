@@ -18,8 +18,8 @@ public enum LogTipEnum {
 
     private String configuredValue;
 
-    LogTipEnum(String configuredValue){
-        this.configuredValue=configuredValue;
+    LogTipEnum(String configuredValue) {
+        this.configuredValue = configuredValue;
     }
 
     public String getConfiguredValue() {

@@ -12,8 +12,8 @@ public enum SeparatorEnum {
 
     private String value;
 
-    SeparatorEnum(String value){
-        this.value=value;
+    SeparatorEnum(String value) {
+        this.value = value;
     }
 
     public String getValue() {

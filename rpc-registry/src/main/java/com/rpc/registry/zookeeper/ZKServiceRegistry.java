@@ -17,9 +17,9 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 public class ZKServiceRegistry implements ServiceRegistry {
     private static CuratorFramework zkClient;
 
-    static{
+    static {
         //init ZK client, assign retry configuration, connect ZK server by curator
-        RetryPolicy retryPolicy = new ExponentialBackoffRetry(Integer.getInteger(ZooKeeperConfigurationEnum.ZK_CONNECT_SLEEP_TIME.getValue()),Integer.getInteger( ZooKeeperConfigurationEnum.ZK_CONNECT_MAX_RETRY_TIMES.getValue()));
+        RetryPolicy retryPolicy = new ExponentialBackoffRetry(Integer.getInteger(ZooKeeperConfigurationEnum.ZK_CONNECT_SLEEP_TIME.getValue()), Integer.getInteger(ZooKeeperConfigurationEnum.ZK_CONNECT_MAX_RETRY_TIMES.getValue()));
         zkClient = CuratorFrameworkFactory.newClient(ZooKeeperConfigurationEnum.ZK_SERVER_ADDRESS.getValue(), retryPolicy);
         zkClient.start();
     }
@@ -30,13 +30,13 @@ public class ZKServiceRegistry implements ServiceRegistry {
             try {
                 byte[] data = serverAddress.getBytes();
                 //if no registry node, create one
-                if (zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue())==null) {
-                    zkClient.create().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue(),null);
+                if (zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue()) == null) {
+                    zkClient.create().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue(), null);
                 }
                 //data node
-                zkClient.create().forPath(ZooKeeperConfigurationEnum.ZK_DATA_PATH.getValue(),data);
-            }catch(Exception e){
-                LogUtil.logError(LogTipEnum.ZK_REGISTER_SERVICE_ERROR+e.getMessage());
+                zkClient.create().forPath(ZooKeeperConfigurationEnum.ZK_DATA_PATH.getValue(), data);
+            } catch (Exception e) {
+                LogUtil.logError(ZKServiceRegistry.class, LogTipEnum.ZK_REGISTER_SERVICE_ERROR + e.getMessage());
             }
         }
     }

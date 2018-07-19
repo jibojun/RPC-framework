@@ -18,15 +18,15 @@ import java.util.UUID;
  * @Description: dynamic proxy to get server response
  */
 public class ClientProxyGenerator<T> implements MethodInterceptor {
-    private ServiceDiscovery serviceDiscovery=new ZKServiceDiscovery();
-    private Enhancer enhancer=new Enhancer();
+    private ServiceDiscovery serviceDiscovery = new ZKServiceDiscovery();
+    private Enhancer enhancer = new Enhancer();
     private T target;
 
-    public ClientProxyGenerator(T target){
-        this.target=target;
+    public ClientProxyGenerator(T target) {
+        this.target = target;
     }
 
-    public Object createProxy(){
+    public Object createProxy() {
         enhancer.setSuperclass(target.getClass());
         enhancer.setCallback(this);
         return enhancer.create();
@@ -35,7 +35,7 @@ public class ClientProxyGenerator<T> implements MethodInterceptor {
     public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         //cglib dynamic proxy to send request to server side
         //build request
-        RPCRequest request=new RPCRequest();
+        RPCRequest request = new RPCRequest();
         request.setRequestId(UUID.randomUUID().toString());
         request.setClassName(method.getDeclaringClass()
                 .getName());
@@ -43,13 +43,13 @@ public class ClientProxyGenerator<T> implements MethodInterceptor {
         request.setParameterTypes(method.getParameterTypes());
         request.setParameters(args);
         //get server address from registry
-        String serverAddress=serviceDiscovery.discover();
-        ClientDataHandler client=new ClientDataHandler(serverAddress);
+        String serverAddress = serviceDiscovery.discover();
+        ClientDataHandler client = new ClientDataHandler(serverAddress);
         //send request to server and get response
-        RPCResponse response=client.sendRequest(request);
-        if(response.isError()){
+        RPCResponse response = client.sendRequest(request);
+        if (response.isError()) {
             throw response.getError();
-        }else {
+        } else {
             return response.getResult();
         }
     }

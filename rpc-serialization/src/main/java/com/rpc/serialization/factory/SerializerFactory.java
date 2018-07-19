@@ -15,8 +15,8 @@ import com.rpc.serialization.protostuff.ProtoStuffObjectOutput;
  */
 public class SerializerFactory {
 
-    public static ObjectOutput getSerializer(Object obj){
-        switch(SerializationConfigurationEnum.CONFIGURED_SERIALIZER.getValue()){
+    public static ObjectOutput getSerializer(Object obj) {
+        switch (SerializationConfigurationEnum.CONFIGURED_SERIALIZER.getValue()) {
             case 1:
                 return new ProtoStuffObjectOutput(obj);
             case 2:
@@ -28,16 +28,16 @@ public class SerializerFactory {
         }
     }
 
-    public static ObjectInput getDeserializer(Class cls,byte[] data){
-        switch(SerializationConfigurationEnum.CONFIGURED_SERIALIZER.getValue()){
+    public static ObjectInput getDeserializer(Class cls, byte[] data) {
+        switch (SerializationConfigurationEnum.CONFIGURED_SERIALIZER.getValue()) {
             case 1:
-                return new ProtoStuffObjectInput(cls,data);
+                return new ProtoStuffObjectInput(cls, data);
             case 2:
                 return new FastJsonObjectInput();
             case 3:
                 return null;
             default:
-                return new ProtoStuffObjectInput(cls,data);
+                return new ProtoStuffObjectInput(cls, data);
         }
     }
 }

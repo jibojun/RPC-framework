@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @Description: annotation for service publish
  * @Date: 2018/7/6_1:12 AM
  */
-@Target({ ElementType.TYPE })
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Component
 public @interface ServerService {

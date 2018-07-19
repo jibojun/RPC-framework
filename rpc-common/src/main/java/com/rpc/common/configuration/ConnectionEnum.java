@@ -11,8 +11,8 @@ public enum ConnectionEnum {
 
     private String configuredValue;
 
-    ConnectionEnum(String configuredValue){
-        this.configuredValue=configuredValue;
+    ConnectionEnum(String configuredValue) {
+        this.configuredValue = configuredValue;
     }
 
     public String getStringValue() {

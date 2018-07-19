@@ -18,20 +18,20 @@ import io.protostuff.runtime.RuntimeSchema;
 public class ProtoStuffObjectOutput implements ObjectOutput {
     private final Schema schema;
     private final Object object;
-    private final LinkedBuffer buffer=LinkedBuffer.allocate(SerializationConfigurationEnum.PROTOSTUFF_BUFFER_SIZE.getValue());
+    private final LinkedBuffer buffer = LinkedBuffer.allocate(SerializationConfigurationEnum.PROTOSTUFF_BUFFER_SIZE.getValue());
 
-    public ProtoStuffObjectOutput(Object object){
-        this.object=object;
-        this.schema=RuntimeSchema.getSchema(object.getClass());
+    public ProtoStuffObjectOutput(Object object) {
+        this.object = object;
+        this.schema = RuntimeSchema.getSchema(object.getClass());
     }
 
     public void writeObject() {
         try {
             LinkedBuffer buffer = LinkedBuffer.allocate(SerializationConfigurationEnum.PROTOSTUFF_BUFFER_SIZE.getValue());
             ProtobufIOUtil.writeTo(this.buffer, this.object, this.schema);
-        }catch (Exception e){
-            LogUtil.logError(LogTipEnum.SERIALIZATION_ERROR_TIP+e.getMessage());
-        }finally {
+        } catch (Exception e) {
+            LogUtil.logError(ProtoStuffObjectOutput.class, LogTipEnum.SERIALIZATION_ERROR_TIP + e.getMessage());
+        } finally {
             buffer.clear();
         }
     }
@@ -40,9 +40,9 @@ public class ProtoStuffObjectOutput implements ObjectOutput {
         try {
             LinkedBuffer buffer = LinkedBuffer.allocate(SerializationConfigurationEnum.PROTOSTUFF_BUFFER_SIZE.getValue());
             return ProtostuffIOUtil.toByteArray(this.object, this.schema, this.buffer);
-        }catch (Exception e){
-            LogUtil.logError(LogTipEnum.SERIALIZATION_ERROR_TIP+e.getMessage());
-        }finally {
+        } catch (Exception e) {
+            LogUtil.logError(ProtoStuffObjectOutput.class, LogTipEnum.SERIALIZATION_ERROR_TIP + e.getMessage());
+        } finally {
             buffer.clear();
             return null;
         }

@@ -26,11 +26,11 @@ public class MessageDecoder extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         //mark index
         in.markReaderIndex();
-        int dataSize=in.readInt();
+        int dataSize = in.readInt();
         //check data size
-        if(dataSize<=0){
+        if (dataSize <= 0) {
             ctx.close();
-            LogUtil.logError(LogTipEnum.SERVER_EMPTY_DATA_ERROR_LOG_TIP.getConfiguredValue());
+            LogUtil.logError(MessageDecoder.class, LogTipEnum.SERVER_EMPTY_DATA_ERROR_LOG_TIP.getConfiguredValue());
         }
         if (in.readableBytes() < dataSize) {
             //reposition to marked index
@@ -39,7 +39,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
         //deserialization
         byte[] data = new byte[dataSize];
         in.readBytes(data);
-        ObjectInput input=SerializerFactory.getDeserializer(genericClass,data);
+        ObjectInput input = SerializerFactory.getDeserializer(genericClass, data);
         Object obj = input.readObject(genericClass);
         out.add(obj);
     }
