@@ -42,9 +42,9 @@ public class ProtoStuffObjectOutput implements ObjectOutput {
             return ProtostuffIOUtil.toByteArray(this.object, this.schema, this.buffer);
         } catch (Exception e) {
             LogUtil.logError(ProtoStuffObjectOutput.class, LogTipEnum.SERIALIZATION_ERROR_TIP + e.getMessage());
+            return null;
         } finally {
             buffer.clear();
-            return null;
         }
     }
 }
