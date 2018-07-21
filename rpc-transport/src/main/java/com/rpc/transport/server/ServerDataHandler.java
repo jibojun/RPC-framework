@@ -57,8 +57,8 @@ public class ServerDataHandler extends ChannelInboundHandlerAdapter {
         Class<?>[] parameterTypes = request.getParameterTypes();
         Object[] parameters = request.getParameters();
         //reflect to get instance
-        Class<?> forName = Class.forName(className);
-        Method method = forName.getMethod(methodName, parameterTypes);
+        Class<?> cls = Class.forName(className);
+        Method method = cls.getMethod(methodName, parameterTypes);
         return method.invoke(serviceBean, parameters);
     }
 }
