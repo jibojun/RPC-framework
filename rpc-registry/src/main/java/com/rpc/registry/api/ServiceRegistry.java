@@ -6,5 +6,5 @@ package com.rpc.registry.api;
  * @Date: 2018/7/8_6:09 PM
  */
 public interface ServiceRegistry {
-    void registerService(String serverAddress);
+    void registerService(String serviceName, String serverAddress);
 }

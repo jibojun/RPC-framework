@@ -3,7 +3,7 @@ package com.rpc.common.configuration;
 public enum ZooKeeperConfigurationEnum {
     ZK_SERVER_ADDRESS("127.0.0.1"),
     ZK_REGISTRY_PATH("/registry"),
-    ZK_DATA_PATH(ZK_REGISTRY_PATH.getValue() + "/data"),
+    ZK_DATA_PATH("/serviceAddress"),
     ZK_CONNECT_MAX_RETRY_TIMES("3"),
     ZK_CONNECT_SLEEP_TIME("1000");
 
