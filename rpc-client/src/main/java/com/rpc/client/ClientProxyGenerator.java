@@ -1,5 +1,6 @@
 package com.rpc.client;
 
+import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.logger.LogUtil;
 import com.rpc.common.rpc.RPCRequest;
 import com.rpc.common.rpc.RPCResponse;
@@ -29,7 +30,7 @@ public class ClientProxyGenerator<T> implements MethodInterceptor {
         this.serviceName = serviceName;
     }
 
-    public Object createProxy() {
+    public Object getProxy() {
         enhancer.setSuperclass(target.getClass());
         enhancer.setCallback(this);
         return enhancer.create();
@@ -47,6 +48,10 @@ public class ClientProxyGenerator<T> implements MethodInterceptor {
         request.setParameters(args);
         //get server address of this service from registry
         String serverAddress = serviceDiscovery.discover(this.serviceName);
+        if(serverAddress==null||serverAddress.isEmpty()){
+            LogUtil.logError(ClientProxyGenerator.class,LogTipEnum.DISCOVERY_ERROR.getConfiguredValue());
+            return null;
+        }
         ClientDataHandler client = new ClientDataHandler(serverAddress);
         //send request to server and get response
         RPCResponse response = client.sendRequest(request);

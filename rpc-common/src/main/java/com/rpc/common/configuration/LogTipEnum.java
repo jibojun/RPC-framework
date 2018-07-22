@@ -16,7 +16,8 @@ public enum LogTipEnum {
     DISCOVERY_SELECT_ONE_NODE(",use the only data node:"),
     DISCOVERY_SELECT_RANDOM_NODE(",use random data node:"),
     ZK_REGISTER_SERVICE_ERROR("error happened when register service,detailed error message is:"),
-    SERVER_ERROR("error on server side, remote call failed");
+    SERVER_ERROR("error on server side, remote call failed"),
+    DISCOVERY_ERROR("failed to discover available service address");
 
     private String configuredValue;
 

@@ -21,7 +21,7 @@ public class ZKServiceRegistry implements ServiceRegistry {
 
     static {
         //init ZK client, assign retry configuration, connect ZK server by curator
-        RetryPolicy retryPolicy = new ExponentialBackoffRetry(Integer.getInteger(ZooKeeperConfigurationEnum.ZK_CONNECT_SLEEP_TIME.getValue()), Integer.getInteger(ZooKeeperConfigurationEnum.ZK_CONNECT_MAX_RETRY_TIMES.getValue()));
+        RetryPolicy retryPolicy = new ExponentialBackoffRetry(Integer.parseInt(ZooKeeperConfigurationEnum.ZK_CONNECT_SLEEP_TIME.getValue()), Integer.parseInt(ZooKeeperConfigurationEnum.ZK_CONNECT_MAX_RETRY_TIMES.getValue()));
         zkClient = CuratorFrameworkFactory.newClient(ZooKeeperConfigurationEnum.ZK_SERVER_ADDRESS.getValue(), retryPolicy);
         zkClient.start();
     }

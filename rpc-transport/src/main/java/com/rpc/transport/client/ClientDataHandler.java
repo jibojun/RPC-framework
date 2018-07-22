@@ -39,7 +39,7 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
                 this.host = result.next();
                 count++;
             } else if (count == 1) {
-                this.port = Integer.getInteger(result.next());
+                this.port = Integer.parseInt(result.next());
             }
         }
     }
