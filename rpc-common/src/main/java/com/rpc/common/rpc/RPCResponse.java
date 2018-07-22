@@ -7,7 +7,7 @@ package com.rpc.common.rpc;
  */
 public class RPCResponse {
     private String requestId;
-    private Throwable error;
+    private Object error;
     private Object result;
 
     public boolean isError() {
@@ -22,19 +22,19 @@ public class RPCResponse {
         this.requestId = requestId;
     }
 
-    public Throwable getError() {
-        return error;
-    }
-
-    public void setError(Throwable error) {
-        this.error = error;
-    }
-
     public Object getResult() {
         return result;
     }
 
     public void setResult(Object result) {
         this.result = result;
+    }
+
+    public void setError(Object error) {
+        this.error = error;
+    }
+
+    public Object getError() {
+        return error;
     }
 }

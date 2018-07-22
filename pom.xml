@@ -17,6 +17,7 @@
         <module>rpc-common</module>
         <module>rpc-transport</module>
         <module>rpc-boot</module>
+        <module>rpc-sample</module>
     </modules>
 
     <dependencies>

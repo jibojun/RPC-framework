@@ -51,7 +51,7 @@ public class ClientProxyGenerator<T> implements MethodInterceptor {
         //send request to server and get response
         RPCResponse response = client.sendRequest(request);
         if (response.isError()) {
-            throw response.getError();
+            return response.getError();
         } else {
             return response.getResult();
         }

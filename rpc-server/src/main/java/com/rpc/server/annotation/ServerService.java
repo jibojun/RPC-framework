@@ -17,5 +17,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Component
 public @interface ServerService {
-    Class<?> value();
+    Class<?> cls();
+    String serviceName();
 }

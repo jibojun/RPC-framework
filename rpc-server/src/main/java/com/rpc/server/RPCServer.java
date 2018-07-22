@@ -3,6 +3,7 @@ package com.rpc.server;
 import com.rpc.common.configuration.SeparatorEnum;
 import com.rpc.common.configuration.ConnectionEnum;
 import com.rpc.common.configuration.LogTipEnum;
+import com.rpc.common.entity.ServiceNameBeanEntity;
 import com.rpc.common.logger.LogUtil;
 import com.rpc.common.rpc.RPCRequest;
 import com.rpc.common.rpc.RPCResponse;
@@ -34,8 +35,10 @@ import java.util.*;
  */
 @Component
 public class RPCServer implements ApplicationContextAware, InitializingBean {
-    private Map<String, Object> serviceMap=new HashMap();
-    private ServiceRegistry registry=new ZKServiceRegistry();
+    //a map with key: class name, value: bean
+    private Map<String, ServiceNameBeanEntity> serviceMap = new HashMap();
+    //a list with service names
+    private ServiceRegistry registry = new ZKServiceRegistry();
 
     //server start up
     public void afterPropertiesSet() throws Exception {
@@ -62,29 +65,31 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
                 protected void initChannel(SocketChannel sc) throws Exception {
                     // add handlers to pipeline for inbound and outbound
                     ChannelPipeline pipeline = sc.pipeline();
-                    pipeline.addLast("1",new MessageDecoder(RPCRequest.class));//decoder,inbound
-                    pipeline.addLast("2",new ServerDataSender());//outbound, send result back to client side
-                    pipeline.addLast("3",new MessageEncoder(RPCResponse.class));//encoder,outbound
-                    pipeline.addLast("4",new ServerDataHandler(serviceMap));//inbound, receive and handle data
+                    pipeline.addLast("1", new MessageDecoder(RPCRequest.class));//decoder,inbound
+                    pipeline.addLast("2", new ServerDataSender());//outbound, send result back to client side
+                    pipeline.addLast("3", new MessageEncoder(RPCResponse.class));//encoder,outbound
+                    pipeline.addLast("4", new ServerDataHandler(serviceMap));//inbound, receive and handle data
                 }
             });
 
-            //bind
-            String host=InetAddress.getLocalHost().getHostAddress();
-            int port=ConnectionEnum.SERVER_DEFAULT_EXPORT_PORT.getIntValue();
-            ChannelFuture f = bootstrap.bind(host,port);
-            LogUtil.logInfo(RPCServer.class,LogTipEnum.SERVER_START_LOG_TIP+host+SeparatorEnum.ADDRESS_SEPARATOR+port);
+            //bind, get local host's address and configured port
+            String host = InetAddress.getLocalHost().getHostAddress();
+            int port = ConnectionEnum.SERVER_DEFAULT_EXPORT_PORT.getIntValue();
+            ChannelFuture f = bootstrap.bind(host, port);
+            LogUtil.logInfo(RPCServer.class, LogTipEnum.SERVER_START_LOG_TIP + host + SeparatorEnum.ADDRESS_SEPARATOR + port);
 
-            //register service
-            registry.registerService(host+SeparatorEnum.ADDRESS_SEPARATOR+port);
+            //register services
+            for (Map.Entry entry : serviceMap.entrySet()) {
+                registry.registerService(host + SeparatorEnum.ADDRESS_SEPARATOR + port, ((ServiceNameBeanEntity) (entry.getValue())).getServiceName());
+            }
 
             if (f.isSuccess()) {
-                LogUtil.logInfo(RPCServer.class,"long connection started successfully");
+                LogUtil.logInfo(RPCServer.class, "long connection started successfully");
             } else {
-                LogUtil.logError(RPCServer.class,"long connection started failed");
+                LogUtil.logError(RPCServer.class, "long connection started failed");
 
             }
-        } finally{
+        } finally {
 //            bossGroup.shutdownGracefully();
 //            workerGroup.shutdownGracefully();
         }
@@ -98,8 +103,7 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
         //if there is services, get class info to set key, use the bean to set value in service map
         if (!serviceBeanMap.isEmpty()) {
             for (Object serviceBean : serviceBeanMap.values()) {
-                serviceMap.put(serviceBean.getClass()
-                        .getAnnotation(ServerService.class).value().getName(), serviceBean);
+                serviceMap.put(serviceBean.getClass().getAnnotation(ServerService.class).cls().getName(), new ServiceNameBeanEntity(serviceBean.getClass().getAnnotation(ServerService.class).serviceName(), serviceBean));
             }
         }
     }

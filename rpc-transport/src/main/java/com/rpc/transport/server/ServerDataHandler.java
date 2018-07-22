@@ -1,6 +1,7 @@
 package com.rpc.transport.server;
 
 import com.rpc.common.configuration.LogTipEnum;
+import com.rpc.common.entity.ServiceNameBeanEntity;
 import com.rpc.common.logger.LogUtil;
 
 import java.lang.reflect.Method;
@@ -18,9 +19,9 @@ import io.netty.channel.*;
  */
 public class ServerDataHandler extends ChannelInboundHandlerAdapter {
 
-    private Map<String, Object> serviceMap;
+    private Map<String, ServiceNameBeanEntity> serviceMap;
 
-    public ServerDataHandler(Map<String, Object> serviceMap) {
+    public ServerDataHandler(Map<String, ServiceNameBeanEntity> serviceMap) {
         this.serviceMap = serviceMap;
     }
 
@@ -31,7 +32,12 @@ public class ServerDataHandler extends ChannelInboundHandlerAdapter {
         RPCResponse response = new RPCResponse();
         try {
             response.setRequestId(request.getRequestId());
-            response.setResult(handleRequest(request));
+            Object result=handleRequest(request);
+            if(result==null){
+                response.setError(new String(LogTipEnum.SERVER_ERROR.getConfiguredValue()));
+            }else {
+                response.setResult(result);
+            }
         } catch (Exception e) {
             response.setError(e);
             LogUtil.logError(ServerDataHandler.class, LogTipEnum.SERVER_HANDLE_ERROR_LOG_TIP + e.getMessage());
@@ -51,7 +57,13 @@ public class ServerDataHandler extends ChannelInboundHandlerAdapter {
     private Object handleRequest(RPCRequest request) throws Exception {
         //classname, got from client request
         String className = request.getClassName();
-        Object serviceBean = this.serviceMap.get(className);
+        Object serviceBean = this.serviceMap.get(className).getServiceBean();
+        if (serviceBean == null) {
+            LogUtil.logError(ServerDataHandler.class, "no bean for service:" + this.serviceMap.get(className).getServiceName());
+            return null;
+        } else {
+            LogUtil.logInfo(ServerDataHandler.class, "service:" + this.serviceMap.get(className).getServiceName() + " is trying to run");
+        }
         //method init
         String methodName = request.getMethodName();
         Class<?>[] parameterTypes = request.getParameterTypes();
