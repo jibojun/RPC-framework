@@ -1,11 +1,13 @@
 package com.rpc.common.rpc;
 
+import java.io.Serializable;
+
 /**
  * @Author: Bojun Ji
  * @Description: request with properties needed for reflect
  * @Date: 2018/7/6_1:29 AM
  */
-public class RPCRequest {
+public class RPCRequest implements Serializable {
     private String requestId;
     private String className;
     private String methodName;

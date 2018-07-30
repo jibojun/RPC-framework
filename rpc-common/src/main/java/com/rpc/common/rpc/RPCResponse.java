@@ -1,11 +1,13 @@
 package com.rpc.common.rpc;
 
+import java.io.Serializable;
+
 /**
  * @Author: Bojun Ji
  * @Description: response with properties returned to client
  * @Date: 2018/7/6_1:30 AM
  */
-public class RPCResponse {
+public class RPCResponse implements Serializable {
     private String requestId;
     private Object error;
     private Object result;
