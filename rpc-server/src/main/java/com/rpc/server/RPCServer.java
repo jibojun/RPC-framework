@@ -57,7 +57,7 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
             //configuration, connection number,
             bootstrap.option(ChannelOption.SO_BACKLOG, ConnectionEnum.SERVER_CONNECTION_NUMBER.getIntValue());
             //configuration, connection keep alive, after acceptor accept the channel
-            bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
+//            bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
 
             //new connection handler
             bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {

@@ -58,7 +58,7 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
                                     .addLast(new MessageDecoder(RPCResponse.class))
                                     .addLast(ClientDataHandler.this);
                         }
-                    }).option(ChannelOption.SO_KEEPALIVE, true);
+                    }).option(ChannelOption.TCP_NODELAY, true);
             // connect and send request to server
             ChannelFuture future = bootstrap.connect(host, port).sync();
             future.channel().writeAndFlush(request).sync();
