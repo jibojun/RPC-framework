@@ -68,6 +68,7 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
             condition.await();
 
             if (this.response != null) {
+                //close connection when received response
                 future.channel().closeFuture().sync();
             }
             return this.response;

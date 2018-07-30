@@ -72,7 +72,7 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
                 }
             });
 
-            //bind, get local host's address and configured port
+            //bind and listening, get local host's address and configured port
             String host = InetAddress.getLocalHost().getHostAddress();
             int port = ConnectionEnum.SERVER_DEFAULT_EXPORT_PORT.getIntValue();
             ChannelFuture f = bootstrap.bind(host, port);
@@ -83,15 +83,13 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
                 registry.registerService(host + SeparatorEnum.ADDRESS_SEPARATOR + port, ((ServiceNameBeanEntity) (entry.getValue())).getServiceName());
             }
 
-            if (f.isSuccess()) {
-                LogUtil.logInfo(RPCServer.class, "long connection started successfully");
-            } else {
-                LogUtil.logError(RPCServer.class, "long connection started failed");
+            LogUtil.logInfo(RPCServer.class, "server started");
 
-            }
+            f.channel().closeFuture().sync();
         } finally {
-//            bossGroup.shutdownGracefully();
-//            workerGroup.shutdownGracefully();
+            //release thread pool resource
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
         }
     }
 
