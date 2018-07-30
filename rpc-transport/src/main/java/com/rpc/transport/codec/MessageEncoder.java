@@ -23,7 +23,7 @@ public class MessageEncoder extends MessageToByteEncoder {
         if (genericClass.isInstance(msg)) {
             ObjectOutput output = SerializerFactory.getSerializer(msg);
             byte[] data = output.writeObjectAndReturn();
-            //data length
+            //data length,write in header, first 4
             out.writeInt(data.length);
             out.writeBytes(data);
         }

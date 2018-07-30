@@ -26,6 +26,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         //mark index
         in.markReaderIndex();
+        //get data size wrote in head, the first 4
         int dataSize = in.readInt();
         //check data size
         if (dataSize <= 0) {

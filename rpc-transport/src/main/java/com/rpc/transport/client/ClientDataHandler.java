@@ -84,7 +84,7 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
         this.response = msg;
 
         try {
-            //wake up thread since already got response
+            //wake up thread since already got response from server side
             lock.lock();
             condition.signalAll();
         } finally {
