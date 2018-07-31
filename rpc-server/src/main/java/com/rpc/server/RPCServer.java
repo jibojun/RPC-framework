@@ -41,6 +41,7 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
     private ServiceRegistry registry = new ZKServiceRegistry();
 
     //server start up
+    @Override
     public void afterPropertiesSet() throws Exception {
         //accept connection group
         EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -59,7 +60,6 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
             //configuration, connection keep alive, after acceptor accept the channel
 //            bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
 
-            //new connection handler
             bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel sc) throws Exception {
@@ -94,6 +94,7 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
     }
 
     //get service class info from service annotation, build service map
+    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         //get service bean map of the service annotation
         Map<String, Object> serviceBeanMap = applicationContext
