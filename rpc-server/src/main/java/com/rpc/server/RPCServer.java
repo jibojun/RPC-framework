@@ -9,7 +9,6 @@ import com.rpc.common.rpc.RPCRequest;
 import com.rpc.common.rpc.RPCResponse;
 import com.rpc.registry.api.ServiceRegistry;
 import com.rpc.registry.zookeeper.ZKServiceRegistry;
-import com.rpc.server.annotation.ServerService;
 import com.rpc.transport.codec.MessageDecoder;
 import com.rpc.transport.codec.MessageEncoder;
 import com.rpc.transport.server.ServerDataHandler;
@@ -19,30 +18,41 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author: Bojun Ji
  * @Description: RPC server side start up
  * @Date: 2018/7/6_1:08 AM
  */
-@Component
-public class RPCServer implements ApplicationContextAware, InitializingBean {
+public class RPCServer {
     //a map with key: class name, value: bean
-    private Map<String, ServiceNameBeanEntity> serviceMap = new HashMap();
-    //a list with service names
-    private ServiceRegistry registry = new ZKServiceRegistry();
+    private static Map<String, ServiceNameBeanEntity> serviceMap = new ConcurrentHashMap<>();
+    //registry
+    private static ServiceRegistry registry = new ZKServiceRegistry();
 
-    //server start up
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    public static boolean exportAllServices(List<ServiceNameBeanEntity> list) {
+        for (ServiceNameBeanEntity item : list) {
+            serviceMap.put(item.getServiceBean().getClass().getName(), item);
+        }
+        try {
+            serverStartUp();
+            return true;
+        } catch (Exception e) {
+            LogUtil.logError(RPCServer.class, e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * server start
+     *
+     * @throws Exception
+     */
+    private static void serverStartUp() throws Exception {
         //accept connection group
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         //detailed event handler group
@@ -79,8 +89,9 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
             LogUtil.logInfo(RPCServer.class, LogTipEnum.SERVER_START_LOG_TIP + host + SeparatorEnum.ADDRESS_SEPARATOR + port);
 
             //register services
-            for (Map.Entry entry : serviceMap.entrySet()) {
-                registry.registerService(host + SeparatorEnum.ADDRESS_SEPARATOR + port, ((ServiceNameBeanEntity) (entry.getValue())).getServiceName());
+
+            for (Map.Entry<String, ServiceNameBeanEntity> entry : serviceMap.entrySet()) {
+                registry.registerService(entry.getValue().getServiceName(), host + SeparatorEnum.ADDRESS_SEPARATOR + port);
             }
 
             LogUtil.logInfo(RPCServer.class, "server started");
@@ -92,19 +103,4 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
             workerGroup.shutdownGracefully();
         }
     }
-
-    //get service class info from service annotation, build service map
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        //get service bean map of the service annotation
-        Map<String, Object> serviceBeanMap = applicationContext
-                .getBeansWithAnnotation(ServerService.class);
-        //if there is services, get class info to set key, use the bean to set value in service map
-        if (!serviceBeanMap.isEmpty()) {
-            for (Object serviceBean : serviceBeanMap.values()) {
-                serviceMap.put(serviceBean.getClass().getAnnotation(ServerService.class).cls().getName(), new ServiceNameBeanEntity(serviceBean.getClass().getAnnotation(ServerService.class).serviceName(), serviceBean));
-            }
-        }
-    }
-
 }
