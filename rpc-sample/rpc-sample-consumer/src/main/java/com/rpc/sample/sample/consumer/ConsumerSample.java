@@ -6,4 +6,8 @@ package com.rpc.sample.sample.consumer;
  * @Date: 2018/8/24_11:17 PM
  */
 public class ConsumerSample {
+
+    public static void main(String[] args) {
+        
+    }
 }
