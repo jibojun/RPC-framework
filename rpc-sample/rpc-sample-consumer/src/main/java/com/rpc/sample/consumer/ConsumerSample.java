@@ -1,4 +1,4 @@
-package com.rpc.sample.sample.consumer;
+package com.rpc.sample.consumer;
 
 /**
  * @Author: Bojun Ji
@@ -8,6 +8,6 @@ package com.rpc.sample.sample.consumer;
 public class ConsumerSample {
 
     public static void main(String[] args) {
-        
+
     }
 }
