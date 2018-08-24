@@ -14,7 +14,7 @@ public class RPCClient {
      * @return
      */
     public static <T> T refer(String serviceName, T target) {
-        ClientProxyGenerator clientProxyGenerator = new ClientProxyGenerator(target, serviceName);
-        return (T)clientProxyGenerator.getProxy();
+        CglibProxyGenerator cglibProxyGenerator = new CglibProxyGenerator(target, serviceName);
+        return (T) cglibProxyGenerator.getProxy();
     }
 }

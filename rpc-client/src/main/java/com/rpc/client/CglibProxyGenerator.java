@@ -17,15 +17,15 @@ import java.util.UUID;
 /**
  * @Author: Bojun Ji
  * @Date: Created in 2018-07-13 17:23
- * @Description: dynamic proxy to get server response
+ * @Description: cglib dynamic proxy for class
  */
-public class ClientProxyGenerator<T> implements MethodInterceptor {
+public class CglibProxyGenerator<T> implements MethodInterceptor {
     private ServiceDiscovery serviceDiscovery = new ZKServiceDiscovery();
     private Enhancer enhancer = new Enhancer();
     private T target;
     private String serviceName;
 
-    public ClientProxyGenerator(T target, String serviceName) {
+    public CglibProxyGenerator(T target, String serviceName) {
         this.target = target;
         this.serviceName = serviceName;
     }
@@ -49,7 +49,7 @@ public class ClientProxyGenerator<T> implements MethodInterceptor {
         //get server address of this service from registry
         String serverAddress = serviceDiscovery.discover(this.serviceName);
         if(serverAddress==null||serverAddress.isEmpty()){
-            LogUtil.logError(ClientProxyGenerator.class,LogTipEnum.DISCOVERY_ERROR.getConfiguredValue());
+            LogUtil.logError(CglibProxyGenerator.class,LogTipEnum.DISCOVERY_ERROR.getConfiguredValue());
             return null;
         }
         ClientDataHandler client = new ClientDataHandler(serverAddress);
