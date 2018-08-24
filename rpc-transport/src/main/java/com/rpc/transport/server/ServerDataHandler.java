@@ -34,7 +34,7 @@ public class ServerDataHandler extends ChannelInboundHandlerAdapter {
             response.setRequestId(request.getRequestId());
             Object result=handleRequest(request);
             if(result==null){
-                response.setError(new String(LogTipEnum.SERVER_ERROR.getConfiguredValue()));
+                response.setError(LogTipEnum.SERVER_ERROR.getConfiguredValue());
             }else {
                 response.setResult(result);
             }
