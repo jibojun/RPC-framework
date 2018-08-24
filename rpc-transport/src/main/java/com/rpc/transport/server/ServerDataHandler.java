@@ -32,10 +32,10 @@ public class ServerDataHandler extends ChannelInboundHandlerAdapter {
         RPCResponse response = new RPCResponse();
         try {
             response.setRequestId(request.getRequestId());
-            Object result=handleRequest(request);
-            if(result==null){
+            Object result = handleRequest(request);
+            if (result == null) {
                 response.setError(LogTipEnum.SERVER_ERROR.getConfiguredValue());
-            }else {
+            } else {
                 response.setResult(result);
             }
         } catch (Exception e) {
@@ -59,8 +59,17 @@ public class ServerDataHandler extends ChannelInboundHandlerAdapter {
         String className = request.getClassName();
         Object serviceBean = this.serviceMap.get(className).getServiceBean();
         if (serviceBean == null) {
-            LogUtil.logError(ServerDataHandler.class, "no bean for service:" + this.serviceMap.get(className).getServiceName());
-            return null;
+            LogUtil.logInfo(ServerDataHandler.class, "no bean for service:" + this.serviceMap.get(className).getServiceName() + ",try reflect to get instance");
+            try {
+                //reflect
+                Class<?> clazz = Class.forName(className);
+                serviceBean = clazz.newInstance();
+                serviceMap.get(className).setServiceBean(serviceBean);
+            } catch (Exception e) {
+                LogUtil.logError(ServerDataHandler.class, "no bean for service:" + this.serviceMap.get(className).getServiceName() + ", reflection failed, " + e);
+                return null;
+            }
+            LogUtil.logInfo(ServerDataHandler.class, "get service instance by reflection, service:" + this.serviceMap.get(className).getServiceName() + " is trying to run");
         } else {
             LogUtil.logInfo(ServerDataHandler.class, "service:" + this.serviceMap.get(className).getServiceName() + " is trying to run");
         }
