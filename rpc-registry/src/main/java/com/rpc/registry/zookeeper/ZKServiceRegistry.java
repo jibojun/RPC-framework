@@ -30,7 +30,6 @@ public class ZKServiceRegistry implements ServiceRegistry {
         //if server address is not null, connect ZK server and create data node for this service
         if (serverAddress != null) {
             try {
-                byte[] data = serverAddress.getBytes();
                 //if no registry node, create one
                 if (zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue()) == null) {
                     zkClient.create().withMode(CreateMode.PERSISTENT).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue(), null);
