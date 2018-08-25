@@ -38,7 +38,7 @@ public class ServiceAddressListener implements PathChildrenCacheListener {
                             serviceMap.put(listenedServiceName, tmpList);
                         }
                     }
-                    serviceMap.put(new String(pathChildrenCacheEvent.getData().getData()), new ArrayList<String>());
+                    serviceMap.put(new String(pathChildrenCacheEvent.getData().getData()), new ArrayList<>());
                 }
                 break;
             }

@@ -86,12 +86,12 @@ public class RPCServer {
             String host = InetAddress.getLocalHost().getHostAddress();
             int port = ConnectionEnum.SERVER_DEFAULT_EXPORT_PORT.getIntValue();
             ChannelFuture f = bootstrap.bind(host, port);
-            LogUtil.logInfo(RPCServer.class, LogTipEnum.SERVER_START_LOG_TIP + host + SeparatorEnum.ADDRESS_SEPARATOR + port);
+            LogUtil.logInfo(RPCServer.class, LogTipEnum.SERVER_START_LOG_TIP + host + SeparatorEnum.ADDRESS_SEPARATOR.getValue() + port);
 
             //register services
 
             for (Map.Entry<String, ServiceNameBeanEntity> entry : serviceMap.entrySet()) {
-                registry.registerService(entry.getValue().getServiceName(), host + SeparatorEnum.ADDRESS_SEPARATOR + port);
+                registry.registerService(entry.getValue().getServiceName(), host + SeparatorEnum.ADDRESS_SEPARATOR.getValue() + port);
             }
 
             LogUtil.logInfo(RPCServer.class, "server started");
