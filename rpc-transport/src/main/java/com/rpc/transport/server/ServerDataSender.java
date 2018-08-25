@@ -14,7 +14,7 @@ public class ServerDataSender extends ChannelOutboundHandlerAdapter {
     //listen to outbound event, send result back to client side
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
-        LogUtil.logInfo(ServerDataSender.class, LogTipEnum.SERVER_SEND_LOG_TIP.getConfiguredValue());
+        LogUtil.logInfo(ServerDataSender.class, LogTipEnum.SERVER_SEND_LOG_TIP.getConfiguredValue() + ", result is :" + msg);
         ctx.writeAndFlush(msg);
     }
 

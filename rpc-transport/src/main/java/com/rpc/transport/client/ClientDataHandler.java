@@ -66,6 +66,7 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
             //sync, wait until channel read get new event of returned message
             lock.lock();
             condition.await();
+            LogUtil.logInfo(this.getClass(), "thread is waiting");
 
             if (this.response != null) {
                 //close connection when received response
@@ -81,12 +82,14 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
     //listen to event and get response
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RPCResponse msg) throws Exception {
+        LogUtil.logInfo(this.getClass(), String.format("got server response: %s", msg));
         this.response = msg;
 
         try {
             //wake up thread since already got response from server side
             lock.lock();
             condition.signalAll();
+            LogUtil.logInfo(this.getClass(), "wake up thread");
         } finally {
             lock.unlock();
         }

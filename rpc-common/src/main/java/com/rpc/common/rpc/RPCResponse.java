@@ -39,4 +39,9 @@ public class RPCResponse implements Serializable {
     public Object getError() {
         return error;
     }
+
+    @Override
+    public String toString() {
+        return result.toString();
+    }
 }
