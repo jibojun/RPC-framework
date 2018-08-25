@@ -35,11 +35,11 @@ public class ZKServiceRegistry implements ServiceRegistry {
                     zkClient.create().withMode(CreateMode.PERSISTENT).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue(), null);
                 }
                 //if no service name node, create one
-                if (serviceName != null && !serviceName.isEmpty() && zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR + serviceName) == null) {
-                    zkClient.create().withMode(CreateMode.PERSISTENT).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR + serviceName, null);
+                if (serviceName != null && !serviceName.isEmpty() && zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName) == null) {
+                    zkClient.create().withMode(CreateMode.PERSISTENT).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName, null);
                 }
                 //create data node with service URL, temp sequential node
-                zkClient.create().withMode(CreateMode.EPHEMERAL_SEQUENTIAL).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR + ZooKeeperConfigurationEnum.ZK_DATA_PATH, serverAddress.getBytes());
+                zkClient.create().withMode(CreateMode.EPHEMERAL_SEQUENTIAL).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName + SeparatorEnum.URL_SEPARATOR.getValue() + ZooKeeperConfigurationEnum.ZK_DATA_PATH, serverAddress.getBytes());
             } catch (Exception e) {
                 LogUtil.logError(ZKServiceRegistry.class, LogTipEnum.ZK_REGISTER_SERVICE_ERROR + e.getMessage());
             }
