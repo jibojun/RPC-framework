@@ -97,6 +97,9 @@ public class RPCServer {
             LogUtil.logInfo(RPCServer.class, "server started");
 
             f.channel().closeFuture().sync();
+            for (Map.Entry<String, ServiceNameBeanEntity> entry : serviceMap.entrySet()) {
+                registry.unRegisterService(entry.getValue().getServiceName(), host + SeparatorEnum.ADDRESS_SEPARATOR.getValue() + port);
+            }
         } finally {
             //release thread pool resource
             bossGroup.shutdownGracefully();

@@ -46,7 +46,20 @@ public class ZKServiceRegistry implements ServiceRegistry {
         }
     }
 
+    @Override
     public void unRegisterService(String serviceName, String serverAddress) {
-
+        if (serverAddress != null) {
+            try {
+                //if no service name node, create one
+                if (serviceName != null && !serviceName.isEmpty() && zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName) != null) {
+                    zkClient.delete().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName + SeparatorEnum.URL_SEPARATOR.getValue() + serverAddress);
+                    if (zkClient.getChildren().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName) == null) {
+                        zkClient.delete().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName);
+                    }
+                }
+            } catch (Exception e) {
+                LogUtil.logError(ZKServiceRegistry.class, LogTipEnum.ZK_REGISTER_SERVICE_ERROR + e.getMessage());
+            }
+        }
     }
 }

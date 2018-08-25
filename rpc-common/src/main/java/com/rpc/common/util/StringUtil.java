@@ -10,7 +10,7 @@ import java.util.List;
  * @Date: 2018/8/26_12:05 AM
  */
 public class StringUtil {
-    public static String getZkSubPath(String path) {
+    public static String getZkSubPath(String path, int regex) {
         if (path == null || path.isEmpty()) {
             return "";
         }
@@ -18,7 +18,7 @@ public class StringUtil {
         if (results.isEmpty()) {
             return "";
         } else {
-            return results.get(1);
+            return results.get(regex);
         }
     }
 }

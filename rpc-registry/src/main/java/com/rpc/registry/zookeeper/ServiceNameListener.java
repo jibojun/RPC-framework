@@ -26,7 +26,7 @@ public final class ServiceNameListener implements PathChildrenCacheListener {
         switch (pathChildrenCacheEvent.getType()) {
             case CHILD_ADDED: {
                 //add the service with empty list
-                String serviceNamePath = StringUtil.getZkSubPath(pathChildrenCacheEvent.getData().getPath());
+                String serviceNamePath = StringUtil.getZkSubPath(pathChildrenCacheEvent.getData().getPath(), 1);
                 if (!serviceMap.containsKey(serviceNamePath)) {
                     serviceMap.put(serviceNamePath, new ArrayList<>());
                 }
@@ -34,7 +34,7 @@ public final class ServiceNameListener implements PathChildrenCacheListener {
             }
             case CHILD_REMOVED: {
                 //remove the service
-                serviceMap.remove(StringUtil.getZkSubPath(pathChildrenCacheEvent.getData().getPath()));
+                serviceMap.remove(StringUtil.getZkSubPath(pathChildrenCacheEvent.getData().getPath(), 1));
                 break;
             }
             case CHILD_UPDATED: {

@@ -7,4 +7,6 @@ package com.rpc.registry.api;
  */
 public interface ServiceRegistry {
     void registerService(String serviceName, String serverAddress);
+
+    void unRegisterService(String serviceName, String serverAddress);
 }

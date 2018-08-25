@@ -1,5 +1,6 @@
 package com.rpc.registry.zookeeper;
 
+import com.rpc.common.util.StringUtil;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
@@ -34,7 +35,7 @@ public class ServiceAddressListener implements PathChildrenCacheListener {
                             serviceAddressList.add(new String(pathChildrenCacheEvent.getData().getData()));
                         } else {
                             List<String> tmpList = new ArrayList<>();
-                            tmpList.add(new String(pathChildrenCacheEvent.getData().getData()));
+                            tmpList.add(StringUtil.getZkSubPath(pathChildrenCacheEvent.getData().getPath(), 2));
                             serviceMap.put(listenedServiceName, tmpList);
                         }
                     }
@@ -48,7 +49,7 @@ public class ServiceAddressListener implements PathChildrenCacheListener {
                     synchronized (ServiceAddressListener.class) {
                         List<String> serviceAddressList = serviceMap.get(listenedServiceName);
                         if (serviceAddressList != null) {
-                            serviceAddressList.remove(new String(pathChildrenCacheEvent.getData().getData()));
+                            serviceAddressList.remove(StringUtil.getZkSubPath(pathChildrenCacheEvent.getData().getPath(), 2));
                         }
                     }
                 }
