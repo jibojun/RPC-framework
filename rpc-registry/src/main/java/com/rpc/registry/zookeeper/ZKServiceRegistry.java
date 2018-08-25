@@ -28,7 +28,7 @@ public class ZKServiceRegistry implements ServiceRegistry {
 
     public void registerService(String serviceName, String serverAddress) {
         //if server address is not null, connect ZK server and create data node for this service
-        if (serverAddress != null) {
+        if (serverAddress != null && !serverAddress.isEmpty()) {
             try {
                 //if no registry node, create one
                 if (zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue()) == null) {
@@ -38,8 +38,10 @@ public class ZKServiceRegistry implements ServiceRegistry {
                 if (serviceName != null && !serviceName.isEmpty() && zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName) == null) {
                     zkClient.create().withMode(CreateMode.PERSISTENT).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName, null);
                 }
-                //create data node with service URL, temp sequential node
-                zkClient.create().withMode(CreateMode.PERSISTENT).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName + SeparatorEnum.URL_SEPARATOR.getValue() + serverAddress, null);
+                if (serviceName != null && !serviceName.isEmpty() && zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName) == null) {
+                    //create data node with service URL, temp sequential node
+                    zkClient.create().withMode(CreateMode.PERSISTENT).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName + SeparatorEnum.URL_SEPARATOR.getValue() + serverAddress, null);
+                }
             } catch (Exception e) {
                 LogUtil.logError(ZKServiceRegistry.class, LogTipEnum.ZK_REGISTER_SERVICE_ERROR + e.getMessage());
             }

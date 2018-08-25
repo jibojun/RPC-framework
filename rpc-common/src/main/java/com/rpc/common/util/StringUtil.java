@@ -18,7 +18,11 @@ public class StringUtil {
         if (results.isEmpty()) {
             return "";
         } else {
-            return results.get(regex);
+            if (regex <= results.size() - 1) {
+                return results.get(regex);
+            } else {
+                return "";
+            }
         }
     }
 }
