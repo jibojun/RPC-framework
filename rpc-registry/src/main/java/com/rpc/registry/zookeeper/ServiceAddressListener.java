@@ -30,16 +30,16 @@ public class ServiceAddressListener implements PathChildrenCacheListener {
                 //add the service address for this service
                 if (serviceMap.containsKey(this.listenedServiceName)) {
                     synchronized (ServiceAddressListener.class) {
+                        String serverAddressNodePath = StringUtil.getZkSubPath(pathChildrenCacheEvent.getData().getPath(), 2);
                         List<String> serviceAddressList = serviceMap.get(listenedServiceName);
-                        if (serviceAddressList != null) {
-                            serviceAddressList.add(new String(pathChildrenCacheEvent.getData().getData()));
-                        } else {
+                        if (serviceAddressList != null && !serviceAddressList.contains(serverAddressNodePath)) {
+                            serviceAddressList.add(serverAddressNodePath);
+                        } else if (serviceAddressList == null) {
                             List<String> tmpList = new ArrayList<>();
-                            tmpList.add(StringUtil.getZkSubPath(pathChildrenCacheEvent.getData().getPath(), 2));
+                            tmpList.add(serverAddressNodePath);
                             serviceMap.put(listenedServiceName, tmpList);
                         }
                     }
-                    serviceMap.put(new String(pathChildrenCacheEvent.getData().getData()), new ArrayList<>());
                 }
                 break;
             }

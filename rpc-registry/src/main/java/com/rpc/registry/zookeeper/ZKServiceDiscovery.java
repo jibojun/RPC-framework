@@ -4,6 +4,7 @@ import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.configuration.SeparatorEnum;
 import com.rpc.common.configuration.ZooKeeperConfigurationEnum;
 import com.rpc.common.util.LogUtil;
+import com.rpc.common.util.StringUtil;
 import com.rpc.registry.api.ServiceDiscovery;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
@@ -61,11 +62,9 @@ public class ZKServiceDiscovery implements ServiceDiscovery {
         for (String serverNamePath : serverNamePaths) {
             try {
                 List<String> serverAddressNodes = zkClient.getChildren().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serverNamePath);
-                List<String> tmpList = new ArrayList<>();
-                for (String serverAddressNode : serverAddressNodes) {
-                    tmpList.add(new String(zkClient.getData().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serverNamePath + SeparatorEnum.URL_SEPARATOR.getValue() + serverAddressNode)));
+                if (serverAddressNodes != null && !serverAddressNodes.isEmpty()) {
+                    serviceMap.put(serverNamePath, serverAddressNodes);
                 }
-                serviceMap.put(serverNamePath, tmpList);
             } catch (Exception e) {
                 LogUtil.logError(ZKServiceDiscovery.class, e.getMessage());
             }

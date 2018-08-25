@@ -5,7 +5,7 @@ public enum ZooKeeperConfigurationEnum {
     ZK_REGISTRY_PATH("/registry"),
     ZK_DATA_PATH("/serviceAddress"),
     ZK_CONNECT_MAX_RETRY_TIMES("3"),
-    ZK_CONNECT_SLEEP_TIME("1000");
+    ZK_CONNECT_SLEEP_TIME("60000");
 
     private String value;
 

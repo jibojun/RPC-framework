@@ -21,7 +21,7 @@ public class StringUtil {
             if (regex <= results.size() - 1) {
                 return results.get(regex);
             } else {
-                return "";
+                return results.get(0);
             }
         }
     }
