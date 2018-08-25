@@ -1,7 +1,5 @@
 package com.rpc.client;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
@@ -9,7 +7,8 @@ import java.lang.reflect.Proxy;
  * @Description:
  * @Date: 2018/8/25_12:28 AM
  */
-public class JdkProxy extends AbstractProxy implements InvocationHandler {
+public class JdkProxy implements IProxy {
+    private String serviceName;
     private Class<?> interfaceClass;
 
 
@@ -19,12 +18,7 @@ public class JdkProxy extends AbstractProxy implements InvocationHandler {
     }
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        return this.callService(method, args);
-    }
-
-    @Override
     public Object getProxy() {
-        return Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[]{interfaceClass}, this);
+        return Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[]{interfaceClass}, new JdkProxyHandler(serviceName));
     }
 }

@@ -11,7 +11,7 @@ import com.rpc.client.RPCClient;
 public class ConsumerSample {
 
     public static void main(String[] args) {
-        ITestService service = RPCClient.refer("testService", ITestService.class);
+        ITestService service = (ITestService) RPCClient.refer("testService", ITestService.class);
         System.out.println(service.testService(1));
         System.out.println(service.testService(2));
         System.out.println(service.testService(3));

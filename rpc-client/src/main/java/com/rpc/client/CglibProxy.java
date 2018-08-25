@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  * @Date: Created in 2018-07-13 17:23
  * @Description: cglib dynamic proxy for class
  */
-public class CglibProxy<T> extends AbstractProxy implements MethodInterceptor {
+public class CglibProxy<T> extends AbstractProxyHandler implements MethodInterceptor, IProxy {
     private Enhancer enhancer = new Enhancer();
     private T target;
 

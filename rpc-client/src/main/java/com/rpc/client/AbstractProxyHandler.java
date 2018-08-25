@@ -16,7 +16,7 @@ import java.util.UUID;
  * @Description:
  * @Date: 2018/8/25_12:37 AM
  */
-public abstract class AbstractProxy implements IProxy {
+public abstract class AbstractProxyHandler {
 
     protected String serviceName;
     protected ServiceDiscovery serviceDiscovery = new ZKServiceDiscovery();
@@ -45,6 +45,4 @@ public abstract class AbstractProxy implements IProxy {
             return response.getResult();
         }
     }
-
-    public abstract Object getProxy();
 }
