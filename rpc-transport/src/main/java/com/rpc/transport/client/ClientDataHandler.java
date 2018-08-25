@@ -14,6 +14,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.util.Iterator;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -27,7 +28,8 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
     private String host;
     private int port;
     private RPCResponse response;
-    private Object object = new Object();
+    private CountDownLatch countDownLatch = new CountDownLatch(1);
+    ;
 
     public ClientDataHandler(String serverAddress) {
         //get host and port from address
@@ -63,17 +65,17 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
             future.channel().writeAndFlush(request).sync();
 
             //sync, wait until channel read get new event of returned message
-            synchronized (object) {
-                object.wait();
-            }
+            LogUtil.logInfo(this.getClass(), "client start to wait response");
+            countDownLatch.await();
 
             if (this.response != null) {
                 //close connection when received response
                 future.channel().closeFuture().sync();
+                LogUtil.logInfo(this.getClass(), "client connection closed");
             }
+            LogUtil.logInfo(this.getClass(), String.format("return response: %s", response));
             return this.response;
         } finally {
-//            lock.unlock();
             group.shutdownGracefully();
         }
     }
@@ -83,10 +85,10 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
     protected void channelRead0(ChannelHandlerContext ctx, RPCResponse msg) throws Exception {
         LogUtil.logInfo(this.getClass(), String.format("got server response: %s", msg));
         this.response = msg;
-
-        synchronized (object) {
-            object.notifyAll();
-        }
+        countDownLatch.countDown();
+        LogUtil.logInfo(this.getClass(), "got response, wake up client and close connection");
+        //short connection, so client close context to close connection
+        ctx.close();
     }
 
     @Override
