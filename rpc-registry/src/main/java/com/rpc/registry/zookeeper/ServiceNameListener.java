@@ -34,7 +34,7 @@ public final class ServiceNameListener implements PathChildrenCacheListener {
             }
             case CHILD_REMOVED: {
                 //remove the service
-                serviceMap.remove(pathChildrenCacheEvent.getData().getPath());
+                serviceMap.remove(StringUtil.getZkSubPath(pathChildrenCacheEvent.getData().getPath()));
                 break;
             }
             case CHILD_UPDATED: {

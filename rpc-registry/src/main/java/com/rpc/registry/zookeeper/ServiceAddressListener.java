@@ -44,11 +44,11 @@ public class ServiceAddressListener implements PathChildrenCacheListener {
             }
             case CHILD_REMOVED: {
                 //remove the service address for this service
-                if (serviceMap.containsKey(pathChildrenCacheEvent.getData().getPath())) {
+                if (serviceMap.containsKey(this.listenedServiceName)) {
                     synchronized (ServiceAddressListener.class) {
                         List<String> serviceAddressList = serviceMap.get(listenedServiceName);
                         if (serviceAddressList != null) {
-                           serviceAddressList.remove(new String(pathChildrenCacheEvent.getData().getData()));
+                            serviceAddressList.remove(new String(pathChildrenCacheEvent.getData().getData()));
                         }
                     }
                 }
