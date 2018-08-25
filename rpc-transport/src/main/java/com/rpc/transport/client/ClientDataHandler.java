@@ -15,9 +15,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @Author: Bojun Ji
