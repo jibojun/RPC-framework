@@ -42,11 +42,11 @@ public class ZKServiceDiscovery implements ServiceDiscovery {
             serviceNamePathChildCache.getListenable().addListener(new ServiceNameListener(serviceMap));
             //listen to service address nodes
             List<String> serverNamePaths = zkClient.getChildren().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue());
-            for(String serverNamePath:serverNamePaths){
-                PathChildrenCache serviceAddressPathChildCache=new PathChildrenCache(zkClient,ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue()+SeparatorEnum.URL_SEPARATOR+serverNamePath,true);
+            for (String serverNamePath : serverNamePaths) {
+                PathChildrenCache serviceAddressPathChildCache = new PathChildrenCache(zkClient, ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serverNamePath, true);
                 serviceAddressPathChildCache.start();
                 serviceAddressPathChildCacheList.add(serviceAddressPathChildCache);
-                serviceNamePathChildCache.getListenable().addListener(new ServiceAddressListener(serviceMap,serverNamePath));
+                serviceNamePathChildCache.getListenable().addListener(new ServiceAddressListener(serviceMap, serverNamePath));
             }
         } catch (Exception e) {
             LogUtil.logError(ZKServiceDiscovery.class, e.getMessage());
@@ -60,18 +60,15 @@ public class ZKServiceDiscovery implements ServiceDiscovery {
             return null;
         }
         int size = serviceAddressList.size();
-        if (size > 0) {
-            if (size == 1) {
-                //only 1 address node, use it
-                LogUtil.logInfo(ZKServiceDiscovery.class, LogTipEnum.SERVICE + serviceName + LogTipEnum.DISCOVERY_SELECT_ONE_NODE + serviceAddressList.get(0));
-                return serviceAddressList.get(0);
-            } else {
-                //multiple nodes, random select
-                String dataNode = serviceAddressList.get(ThreadLocalRandom.current().nextInt(size));
-                LogUtil.logInfo(ZKServiceDiscovery.class, LogTipEnum.SERVICE + serviceName + LogTipEnum.DISCOVERY_SELECT_RANDOM_NODE + dataNode);
-                return dataNode;
-            }
+        if (size == 1) {
+            //only 1 address node, use it
+            LogUtil.logInfo(ZKServiceDiscovery.class, LogTipEnum.SERVICE + serviceName + LogTipEnum.DISCOVERY_SELECT_ONE_NODE + serviceAddressList.get(0));
+            return serviceAddressList.get(0);
+        } else {
+            //multiple nodes, random select
+            String dataNode = serviceAddressList.get(ThreadLocalRandom.current().nextInt(size));
+            LogUtil.logInfo(ZKServiceDiscovery.class, LogTipEnum.SERVICE + serviceName + LogTipEnum.DISCOVERY_SELECT_RANDOM_NODE + dataNode);
+            return dataNode;
         }
-        return null;
     }
 }
