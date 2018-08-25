@@ -1,5 +1,8 @@
 package com.rpc.client;
 
+import com.rpc.registry.api.ServiceDiscovery;
+import com.rpc.registry.zookeeper.ZKServiceDiscovery;
+
 import java.lang.reflect.Proxy;
 
 /**
@@ -10,6 +13,7 @@ import java.lang.reflect.Proxy;
 public class JdkProxy implements IProxy {
     private String serviceName;
     private Class<?> interfaceClass;
+    private ServiceDiscovery serviceDiscovery = new ZKServiceDiscovery();
 
 
     public JdkProxy(String serviceName, Class<?> interfaceClass) {
@@ -19,6 +23,6 @@ public class JdkProxy implements IProxy {
 
     @Override
     public Object getProxy() {
-        return Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[]{interfaceClass}, new JdkProxyHandler(serviceName));
+        return Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[]{interfaceClass}, new JdkProxyHandler(serviceName, serviceDiscovery));
     }
 }

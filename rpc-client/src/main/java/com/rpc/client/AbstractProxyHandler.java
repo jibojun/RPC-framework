@@ -5,7 +5,6 @@ import com.rpc.common.util.LogUtil;
 import com.rpc.common.rpc.RPCRequest;
 import com.rpc.common.rpc.RPCResponse;
 import com.rpc.registry.api.ServiceDiscovery;
-import com.rpc.registry.zookeeper.ZKServiceDiscovery;
 import com.rpc.transport.client.ClientDataHandler;
 
 import java.lang.reflect.Method;
@@ -18,10 +17,8 @@ import java.util.UUID;
  */
 public abstract class AbstractProxyHandler {
 
-    protected String serviceName;
-    protected ServiceDiscovery serviceDiscovery = new ZKServiceDiscovery();
 
-    protected Object callService(Method method, Object[] args) throws Exception {
+    protected Object callService(Method method, Object[] args, String serviceName, ServiceDiscovery serviceDiscovery) throws Exception {
         //build request
         RPCRequest request = new RPCRequest();
         request.setRequestId(UUID.randomUUID().toString());
@@ -30,9 +27,9 @@ public abstract class AbstractProxyHandler {
         request.setMethodName(method.getName());
         request.setParameterTypes(method.getParameterTypes());
         request.setParameters(args);
-        request.setServiceName(this.serviceName);
+        request.setServiceName(serviceName);
         //get server address of this service from registry
-        String serverAddress = serviceDiscovery.discover(this.serviceName);
+        String serverAddress = serviceDiscovery.discover(serviceName);
         if (serverAddress == null || serverAddress.isEmpty()) {
             LogUtil.logError(CglibProxy.class, LogTipEnum.DISCOVERY_ERROR.getConfiguredValue());
             return null;

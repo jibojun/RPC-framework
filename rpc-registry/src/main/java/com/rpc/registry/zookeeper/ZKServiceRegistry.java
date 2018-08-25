@@ -39,10 +39,14 @@ public class ZKServiceRegistry implements ServiceRegistry {
                     zkClient.create().withMode(CreateMode.PERSISTENT).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName, null);
                 }
                 //create data node with service URL, temp sequential node
-                zkClient.create().withMode(CreateMode.EPHEMERAL_SEQUENTIAL).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName + SeparatorEnum.URL_SEPARATOR.getValue() + ZooKeeperConfigurationEnum.ZK_DATA_PATH, serverAddress.getBytes());
+                zkClient.create().withMode(CreateMode.PERSISTENT).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName + SeparatorEnum.URL_SEPARATOR.getValue() + serverAddress, null);
             } catch (Exception e) {
                 LogUtil.logError(ZKServiceRegistry.class, LogTipEnum.ZK_REGISTER_SERVICE_ERROR + e.getMessage());
             }
         }
+    }
+
+    public void unRegisterService(String serviceName, String serverAddress) {
+
     }
 }

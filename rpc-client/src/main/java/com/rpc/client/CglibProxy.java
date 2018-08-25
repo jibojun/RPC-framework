@@ -1,5 +1,7 @@
 package com.rpc.client;
 
+import com.rpc.registry.api.ServiceDiscovery;
+import com.rpc.registry.zookeeper.ZKServiceDiscovery;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -12,6 +14,8 @@ import java.lang.reflect.Method;
  * @Description: cglib dynamic proxy for class
  */
 public class CglibProxy<T> extends AbstractProxyHandler implements MethodInterceptor, IProxy {
+    private String serviceName;
+    private ServiceDiscovery serviceDiscovery = new ZKServiceDiscovery();
     private Enhancer enhancer = new Enhancer();
     private T target;
 
@@ -28,6 +32,6 @@ public class CglibProxy<T> extends AbstractProxyHandler implements MethodInterce
 
     public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         //cglib dynamic proxy to send request to server side
-        return this.callService(method, args);
+        return this.callService(method, args, serviceName, serviceDiscovery);
     }
 }
