@@ -15,13 +15,13 @@ public class RPCClient {
      */
     public static <T> T refer(String serviceName, T target) {
         //cglib
-        IProxyGenerator cglibProxyGenerator = new CglibProxyGenerator(target, serviceName);
+        IProxy cglibProxyGenerator = new CglibProxy(target, serviceName);
         return (T) cglibProxyGenerator.getProxy();
     }
 
     public static <T> T refer(String serviceName, Class<?> interfaceClass) {
         //jdk proxy
-        IProxyGenerator jdkProxyGenerator = new JdkProxyGenerator(serviceName, interfaceClass);
+        IProxy jdkProxyGenerator = new JdkProxy(serviceName, interfaceClass);
         return (T) jdkProxyGenerator.getProxy();
     }
 }

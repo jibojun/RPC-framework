@@ -9,11 +9,11 @@ import java.lang.reflect.Proxy;
  * @Description:
  * @Date: 2018/8/25_12:28 AM
  */
-public class JdkProxyGenerator extends AbstractProxyGenerator implements InvocationHandler {
+public class JdkProxy extends AbstractProxy implements InvocationHandler {
     private Class<?> interfaceClass;
 
 
-    public JdkProxyGenerator(String serviceName, Class<?> interfaceClass) {
+    public JdkProxy(String serviceName, Class<?> interfaceClass) {
         this.serviceName = serviceName;
         this.interfaceClass = interfaceClass;
     }
@@ -25,6 +25,6 @@ public class JdkProxyGenerator extends AbstractProxyGenerator implements Invocat
 
     @Override
     public Object getProxy() {
-        return Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[]{interfaceClass}, new JdkProxyGenerator(this.serviceName, this.interfaceClass));
+        return Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[]{interfaceClass}, this);
     }
 }

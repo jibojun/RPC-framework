@@ -16,7 +16,7 @@ import java.util.UUID;
  * @Description:
  * @Date: 2018/8/25_12:37 AM
  */
-public abstract class AbstractProxyGenerator implements IProxyGenerator {
+public abstract class AbstractProxy implements IProxy {
 
     protected String serviceName;
     protected ServiceDiscovery serviceDiscovery = new ZKServiceDiscovery();
@@ -33,7 +33,7 @@ public abstract class AbstractProxyGenerator implements IProxyGenerator {
         //get server address of this service from registry
         String serverAddress = serviceDiscovery.discover(this.serviceName);
         if (serverAddress == null || serverAddress.isEmpty()) {
-            LogUtil.logError(CglibProxyGenerator.class, LogTipEnum.DISCOVERY_ERROR.getConfiguredValue());
+            LogUtil.logError(CglibProxy.class, LogTipEnum.DISCOVERY_ERROR.getConfiguredValue());
             return null;
         }
         ClientDataHandler client = new ClientDataHandler(serverAddress);

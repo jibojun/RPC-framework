@@ -11,11 +11,11 @@ import java.lang.reflect.Method;
  * @Date: Created in 2018-07-13 17:23
  * @Description: cglib dynamic proxy for class
  */
-public class CglibProxyGenerator<T> extends AbstractProxyGenerator implements MethodInterceptor {
+public class CglibProxy<T> extends AbstractProxy implements MethodInterceptor {
     private Enhancer enhancer = new Enhancer();
     private T target;
 
-    public CglibProxyGenerator(T target, String serviceName) {
+    public CglibProxy(T target, String serviceName) {
         this.target = target;
         this.serviceName = serviceName;
     }

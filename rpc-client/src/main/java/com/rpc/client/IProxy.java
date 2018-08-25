@@ -5,6 +5,6 @@ package com.rpc.client;
  * @Description:
  * @Date: 2018/8/25_12:51 AM
  */
-public interface IProxyGenerator {
+public interface IProxy {
     Object getProxy();
 }

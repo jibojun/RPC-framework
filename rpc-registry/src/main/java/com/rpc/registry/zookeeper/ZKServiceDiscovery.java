@@ -26,7 +26,7 @@ public class ZKServiceDiscovery implements ServiceDiscovery {
     //list to store service address info from ZK
     private volatile static Map<String, List<String>> serviceMap = new ConcurrentHashMap<>();
     private static PathChildrenCache serviceNamePathChildCache;
-    private static List<PathChildrenCache> serviceAddressPathChildCacheList;
+//    private static List<PathChildrenCache> serviceAddressPathChildCacheList;
 
 
     static {
@@ -45,8 +45,8 @@ public class ZKServiceDiscovery implements ServiceDiscovery {
             for (String serverNamePath : serverNamePaths) {
                 PathChildrenCache serviceAddressPathChildCache = new PathChildrenCache(zkClient, ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serverNamePath, true);
                 serviceAddressPathChildCache.start();
-                serviceAddressPathChildCacheList.add(serviceAddressPathChildCache);
-                serviceNamePathChildCache.getListenable().addListener(new ServiceAddressListener(serviceMap, serverNamePath));
+//                serviceAddressPathChildCacheList.add(serviceAddressPathChildCache);
+                serviceAddressPathChildCache.getListenable().addListener(new ServiceAddressListener(serviceMap, serverNamePath));
             }
         } catch (Exception e) {
             LogUtil.logError(ZKServiceDiscovery.class, e.getMessage());

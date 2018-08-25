@@ -1,6 +1,6 @@
 package com.rpc.client.test;
 
-import com.rpc.client.CglibProxyGenerator;
+import com.rpc.client.CglibProxy;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertThat;
@@ -14,7 +14,7 @@ import static org.hamcrest.CoreMatchers.*;
 public class ProxyTest {
     @Test
     public void testClientProxy() {
-        CglibProxyGenerator cglibProxyGenerator = new CglibProxyGenerator(new TestClass(), "testService");
+        CglibProxy cglibProxyGenerator = new CglibProxy(new TestClass(), "testService");
         TestClass proxy = (TestClass) cglibProxyGenerator.getProxy();
         assertThat(proxy, notNullValue());
         proxy.testMethod1();
