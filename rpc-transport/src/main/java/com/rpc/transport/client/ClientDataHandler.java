@@ -27,8 +27,7 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
     private String host;
     private int port;
     private RPCResponse response;
-    private Lock lock = new ReentrantLock();
-    private Condition condition = lock.newCondition();
+    private Object object = new Object();
 
     public ClientDataHandler(String serverAddress) {
         //get host and port from address
@@ -64,9 +63,9 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
             future.channel().writeAndFlush(request).sync();
 
             //sync, wait until channel read get new event of returned message
-            lock.lock();
-            condition.await();
-            LogUtil.logInfo(this.getClass(), "thread is waiting");
+            synchronized (object) {
+                object.wait();
+            }
 
             if (this.response != null) {
                 //close connection when received response
@@ -74,7 +73,7 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
             }
             return this.response;
         } finally {
-            lock.unlock();
+//            lock.unlock();
             group.shutdownGracefully();
         }
     }
@@ -85,13 +84,8 @@ public class ClientDataHandler extends SimpleChannelInboundHandler<RPCResponse> 
         LogUtil.logInfo(this.getClass(), String.format("got server response: %s", msg));
         this.response = msg;
 
-        try {
-            //wake up thread since already got response from server side
-            lock.lock();
-            condition.signalAll();
-            LogUtil.logInfo(this.getClass(), "wake up thread");
-        } finally {
-            lock.unlock();
+        synchronized (object) {
+            object.notifyAll();
         }
     }
 
