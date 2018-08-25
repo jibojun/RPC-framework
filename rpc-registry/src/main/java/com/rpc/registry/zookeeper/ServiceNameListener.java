@@ -26,14 +26,13 @@ public final class ServiceNameListener implements PathChildrenCacheListener {
             case CHILD_ADDED: {
                 //add the service with empty list
                 if (!serviceMap.containsKey(pathChildrenCacheEvent.getData().getPath())) {
-                    serviceMap.put(new String(pathChildrenCacheEvent.getData().getData()), new ArrayList<String>());
+                    serviceMap.put(new String(pathChildrenCacheEvent.getData().getData()), new ArrayList<>());
                 }
                 break;
             }
             case CHILD_REMOVED: {
                 //remove the service
-                if (serviceMap.containsKey(pathChildrenCacheEvent.getData().getPath()))
-                    serviceMap.remove(pathChildrenCacheEvent.getData().getPath());
+                serviceMap.remove(pathChildrenCacheEvent.getData().getPath());
                 break;
             }
             case CHILD_UPDATED: {
