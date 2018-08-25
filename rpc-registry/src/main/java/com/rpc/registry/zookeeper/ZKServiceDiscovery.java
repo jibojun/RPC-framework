@@ -3,7 +3,7 @@ package com.rpc.registry.zookeeper;
 import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.configuration.SeparatorEnum;
 import com.rpc.common.configuration.ZooKeeperConfigurationEnum;
-import com.rpc.common.logger.LogUtil;
+import com.rpc.common.util.LogUtil;
 import com.rpc.registry.api.ServiceDiscovery;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;

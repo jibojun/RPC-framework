@@ -2,7 +2,7 @@ package com.rpc.transport.client;
 
 import com.google.common.base.Splitter;
 import com.rpc.common.configuration.SeparatorEnum;
-import com.rpc.common.logger.LogUtil;
+import com.rpc.common.util.LogUtil;
 import com.rpc.common.rpc.RPCRequest;
 import com.rpc.common.rpc.RPCResponse;
 import com.rpc.transport.codec.MessageDecoder;

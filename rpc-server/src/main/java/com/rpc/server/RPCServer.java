@@ -4,7 +4,7 @@ import com.rpc.common.configuration.SeparatorEnum;
 import com.rpc.common.configuration.ConnectionEnum;
 import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.entity.ServiceNameBeanEntity;
-import com.rpc.common.logger.LogUtil;
+import com.rpc.common.util.LogUtil;
 import com.rpc.common.rpc.RPCRequest;
 import com.rpc.common.rpc.RPCResponse;
 import com.rpc.registry.api.ServiceRegistry;

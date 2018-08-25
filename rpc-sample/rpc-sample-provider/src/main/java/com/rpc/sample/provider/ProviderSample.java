@@ -16,11 +16,11 @@ import java.util.List;
  */
 public class ProviderSample {
     public static void main(String[] args) {
-        ApplicationContext context=new ClassPathXmlApplicationContext("spring.xml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
         ((ClassPathXmlApplicationContext) context).start();
-        ITestService serviceBean=(ITestService)context.getBean("testService");
-        List<ServiceNameBeanEntity> serviceList=new ArrayList<>();
-        serviceList.add(new ServiceNameBeanEntity("testService",serviceBean));
+        ITestService serviceBean = (ITestService) context.getBean("testService");
+        List<ServiceNameBeanEntity> serviceList = new ArrayList<>();
+        serviceList.add(new ServiceNameBeanEntity("testService", serviceBean));
         RPCServer.exportAllServices(serviceList);
     }
 }

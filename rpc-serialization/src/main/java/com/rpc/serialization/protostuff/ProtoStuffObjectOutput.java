@@ -2,7 +2,7 @@ package com.rpc.serialization.protostuff;
 
 import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.configuration.SerializationConfigurationEnum;
-import com.rpc.common.logger.LogUtil;
+import com.rpc.common.util.LogUtil;
 import com.rpc.serialization.api.ObjectOutput;
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtobufIOUtil;
