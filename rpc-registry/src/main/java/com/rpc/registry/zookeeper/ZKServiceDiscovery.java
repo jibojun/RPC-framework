@@ -44,14 +44,9 @@ public class ZKServiceDiscovery implements ServiceDiscovery {
             serviceNamePathChildCache.getListenable().addListener(new ServiceNameListener(serviceMap));
             //init service map and listen to service address nodes
             List<String> serverNamePaths = zkClient.getChildren().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue());
+            //init map
+            initServiceMap(serverNamePaths);
             for (String serverNamePath : serverNamePaths) {
-                //init map
-                List<String> serverAddressNodes = zkClient.getChildren().forPath(serverNamePath);
-                List<String> tmpList = new ArrayList<>();
-                for (String serverAddressNode : serverAddressNodes) {
-                    tmpList.add(new String(zkClient.getData().forPath(serverAddressNode)));
-                }
-                serviceMap.put(serverNamePath, tmpList);
                 //add listener
                 PathChildrenCache serviceAddressPathChildCache = new PathChildrenCache(zkClient, ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serverNamePath, true);
                 serviceAddressPathChildCache.start();
@@ -61,6 +56,22 @@ public class ZKServiceDiscovery implements ServiceDiscovery {
             LogUtil.logError(ZKServiceDiscovery.class, e.getMessage());
         }
     }
+
+    private static void initServiceMap(List<String> serverNamePaths) {
+        for (String serverNamePath : serverNamePaths) {
+            try {
+                List<String> serverAddressNodes = zkClient.getChildren().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serverNamePath);
+                List<String> tmpList = new ArrayList<>();
+                for (String serverAddressNode : serverAddressNodes) {
+                    tmpList.add(new String(zkClient.getData().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serverNamePath + SeparatorEnum.URL_SEPARATOR.getValue() + serverAddressNode)));
+                }
+                serviceMap.put(serverNamePath, tmpList);
+            } catch (Exception e) {
+                LogUtil.logError(ZKServiceDiscovery.class, e.getMessage());
+            }
+        }
+    }
+
 
     //discover and get node in node list
     public String discover(String serviceName) {

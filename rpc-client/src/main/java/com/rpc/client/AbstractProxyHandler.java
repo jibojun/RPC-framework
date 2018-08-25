@@ -30,6 +30,7 @@ public abstract class AbstractProxyHandler {
         request.setMethodName(method.getName());
         request.setParameterTypes(method.getParameterTypes());
         request.setParameters(args);
+        request.setServiceName(this.serviceName);
         //get server address of this service from registry
         String serverAddress = serviceDiscovery.discover(this.serviceName);
         if (serverAddress == null || serverAddress.isEmpty()) {

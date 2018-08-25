@@ -13,6 +13,7 @@ public class RPCRequest implements Serializable {
     private String methodName;
     private Class<?>[] parameterTypes;
     private Object[] parameters;
+    private String serviceName;
 
     public String getRequestId() {
         return requestId;
@@ -52,5 +53,13 @@ public class RPCRequest implements Serializable {
 
     public void setParameters(Object[] parameters) {
         this.parameters = parameters;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 }
