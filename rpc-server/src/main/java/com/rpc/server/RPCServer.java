@@ -36,7 +36,13 @@ public class RPCServer {
 
     public static boolean exportAllServices(List<ServiceNameBeanEntity> list) {
         for (ServiceNameBeanEntity item : list) {
-            serviceMap.put(item.getServiceBean().getClass().getName(), item);
+            Class<?>[] interfaceClasses = item.getServiceBean().getClass().getInterfaces();
+            if (interfaceClasses == null || interfaceClasses.length == 0) {
+                LogUtil.logError(RPCServer.class, "no interface implemented for the class");
+                return false;
+            } else {
+                serviceMap.put(interfaceClasses[0].getName(), item);
+            }
         }
         try {
             serverStartUp();
@@ -76,9 +82,10 @@ public class RPCServer {
                     // add handlers to pipeline for inbound and outbound
                     ChannelPipeline pipeline = sc.pipeline();
                     pipeline.addLast("1", new MessageDecoder(RPCRequest.class));//decoder,inbound
-                    pipeline.addLast("2", new ServerDataSender());//outbound, send result back to client side
+                    pipeline.addLast("2", new ServerDataHandler(serviceMap));//inbound, receive and handle data
                     pipeline.addLast("3", new MessageEncoder(RPCResponse.class));//encoder,outbound
-                    pipeline.addLast("4", new ServerDataHandler(serviceMap));//inbound, receive and handle data
+                    pipeline.addLast("4", new ServerDataSender());//outbound, send result back to client side
+
                 }
             });
 
