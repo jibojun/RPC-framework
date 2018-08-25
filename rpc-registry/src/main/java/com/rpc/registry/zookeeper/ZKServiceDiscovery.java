@@ -11,6 +11,7 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +27,6 @@ public class ZKServiceDiscovery implements ServiceDiscovery {
     //list to store service address info from ZK
     private volatile static Map<String, List<String>> serviceMap = new ConcurrentHashMap<>();
     private static PathChildrenCache serviceNamePathChildCache;
-//    private static List<PathChildrenCache> serviceAddressPathChildCacheList;
 
 
     static {
@@ -34,18 +34,27 @@ public class ZKServiceDiscovery implements ServiceDiscovery {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(Integer.parseInt(ZooKeeperConfigurationEnum.ZK_CONNECT_SLEEP_TIME.getValue()), Integer.parseInt(ZooKeeperConfigurationEnum.ZK_CONNECT_MAX_RETRY_TIMES.getValue()));
         zkClient = CuratorFrameworkFactory.newClient(ZooKeeperConfigurationEnum.ZK_SERVER_ADDRESS.getValue(), retryPolicy);
         zkClient.start();
+
+
         //init path children cache
         try {
             //listen to service name nodes
             serviceNamePathChildCache = new PathChildrenCache(zkClient, ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue(), true);
             serviceNamePathChildCache.start();
             serviceNamePathChildCache.getListenable().addListener(new ServiceNameListener(serviceMap));
-            //listen to service address nodes
+            //init service map and listen to service address nodes
             List<String> serverNamePaths = zkClient.getChildren().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue());
             for (String serverNamePath : serverNamePaths) {
+                //init map
+                List<String> serverAddressNodes = zkClient.getChildren().forPath(serverNamePath);
+                List<String> tmpList = new ArrayList<>();
+                for (String serverAddressNode : serverAddressNodes) {
+                    tmpList.add(new String(zkClient.getData().forPath(serverAddressNode)));
+                }
+                serviceMap.put(serverNamePath, tmpList);
+                //add listener
                 PathChildrenCache serviceAddressPathChildCache = new PathChildrenCache(zkClient, ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serverNamePath, true);
                 serviceAddressPathChildCache.start();
-//                serviceAddressPathChildCacheList.add(serviceAddressPathChildCache);
                 serviceAddressPathChildCache.getListenable().addListener(new ServiceAddressListener(serviceMap, serverNamePath));
             }
         } catch (Exception e) {
