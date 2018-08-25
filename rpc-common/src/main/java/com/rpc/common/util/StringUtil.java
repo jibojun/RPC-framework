@@ -10,7 +10,7 @@ import java.util.List;
  * @Date: 2018/8/26_12:05 AM
  */
 public class StringUtil {
-    public String getZkSubPath(String path) {
+    public static String getZkSubPath(String path) {
         if (path == null || path.isEmpty()) {
             return "";
         }

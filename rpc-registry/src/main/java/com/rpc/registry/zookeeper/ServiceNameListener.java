@@ -1,5 +1,6 @@
 package com.rpc.registry.zookeeper;
 
+import com.rpc.common.util.StringUtil;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
@@ -25,8 +26,9 @@ public final class ServiceNameListener implements PathChildrenCacheListener {
         switch (pathChildrenCacheEvent.getType()) {
             case CHILD_ADDED: {
                 //add the service with empty list
-                if (!serviceMap.containsKey(pathChildrenCacheEvent.getData().getPath())) {
-                    serviceMap.put(new String(pathChildrenCacheEvent.getData().getData()), new ArrayList<>());
+                String serviceNamePath = StringUtil.getZkSubPath(pathChildrenCacheEvent.getData().getPath());
+                if (!serviceMap.containsKey(serviceNamePath)) {
+                    serviceMap.put(serviceNamePath, new ArrayList<>());
                 }
                 break;
             }
