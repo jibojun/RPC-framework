@@ -38,7 +38,7 @@ public class ZKServiceRegistry implements ServiceRegistry {
                 if (serviceName != null && !serviceName.isEmpty() && zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName) == null) {
                     zkClient.create().withMode(CreateMode.PERSISTENT).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName, null);
                 }
-                if (serviceName != null && !serviceName.isEmpty() && zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName) == null) {
+                if (serviceName != null && !serviceName.isEmpty() && zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName + SeparatorEnum.URL_SEPARATOR.getValue() + serverAddress) == null) {
                     //create data node with service URL, temp sequential node
                     zkClient.create().withMode(CreateMode.PERSISTENT).forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName + SeparatorEnum.URL_SEPARATOR.getValue() + serverAddress, null);
                 }
