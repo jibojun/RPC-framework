@@ -7,4 +7,5 @@ package com.rpc.api;
  */
 public interface ITestService {
     String testService(int i);
+    int testService1(String s);
 }

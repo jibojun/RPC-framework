@@ -15,5 +15,8 @@ public class ConsumerSample {
         System.out.println(service.testService(1));
         System.out.println(service.testService(2));
         System.out.println(service.testService(3));
+        System.out.println(service.testService1("a"));
+        System.out.println(service.testService1("b"));
+        System.out.println(service.testService1("c"));
     }
 }

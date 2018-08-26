@@ -29,4 +29,20 @@ public class TestService implements ITestService {
         }
         return result;
     }
+
+    @Override
+    public int testService1(String s) {
+        int result = 0;
+        switch (s) {
+            case "a":
+                result = 1;
+                break;
+            case "b":
+                result = 2;
+                break;
+            default:
+                break;
+        }
+        return result;
+    }
 }
