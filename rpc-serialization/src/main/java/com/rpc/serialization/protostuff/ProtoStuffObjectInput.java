@@ -24,6 +24,7 @@ public class ProtoStuffObjectInput implements ObjectInput {
         this.data = data;
     }
 
+    @SuppressWarnings("unchecked")
     public Object readObject(Object object) {
         try {
             ProtostuffIOUtil.mergeFrom(this.data, object, this.schema);
@@ -33,6 +34,7 @@ public class ProtoStuffObjectInput implements ObjectInput {
         return object;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T readObject(Class<T> cls) {
         T object = null;
         try {

@@ -7,6 +7,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
+import java.util.Arrays;
+
 /**
  * @Author: Bojun Ji
  * @Description:
@@ -24,7 +26,7 @@ public class MessageEncoder extends MessageToByteEncoder {
         if (genericClass.isInstance(msg)) {
             ObjectOutput output = SerializerFactory.getSerializer(msg);
             byte[] data = output.writeObjectAndReturn();
-            LogUtil.logInfo(this.getClass(), String.format("serialization object: %s", (Object) data));
+            LogUtil.logInfo(this.getClass(), String.format("serialization object: %s", Arrays.toString(data)));
             //data length,write in header, first 4
             out.writeInt(data.length);
             out.writeBytes(data);
