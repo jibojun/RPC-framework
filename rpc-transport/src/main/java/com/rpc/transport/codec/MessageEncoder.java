@@ -1,5 +1,6 @@
 package com.rpc.transport.codec;
 
+import com.rpc.common.util.LogUtil;
 import com.rpc.serialization.api.ObjectOutput;
 import com.rpc.serialization.factory.SerializerFactory;
 import io.netty.buffer.ByteBuf;
@@ -23,6 +24,7 @@ public class MessageEncoder extends MessageToByteEncoder {
         if (genericClass.isInstance(msg)) {
             ObjectOutput output = SerializerFactory.getSerializer(msg);
             byte[] data = output.writeObjectAndReturn();
+            LogUtil.logInfo(this.getClass(), String.format("serialization object: %s", (Object) data));
             //data length,write in header, first 4
             out.writeInt(data.length);
             out.writeBytes(data);
