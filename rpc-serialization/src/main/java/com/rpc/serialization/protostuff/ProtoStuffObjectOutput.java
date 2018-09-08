@@ -25,9 +25,9 @@ public class ProtoStuffObjectOutput implements ObjectOutput {
         this.schema = RuntimeSchema.getSchema(object.getClass());
     }
 
+    @SuppressWarnings("unchecked")
     public void writeObject() {
         try {
-            LinkedBuffer buffer = LinkedBuffer.allocate(SerializationConfigurationEnum.PROTOSTUFF_BUFFER_SIZE.getValue());
             ProtobufIOUtil.writeTo(this.buffer, this.object, this.schema);
         } catch (Exception e) {
             LogUtil.logError(ProtoStuffObjectOutput.class, LogTipEnum.SERIALIZATION_ERROR_TIP + e.getMessage());
@@ -36,9 +36,9 @@ public class ProtoStuffObjectOutput implements ObjectOutput {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public byte[] writeObjectAndReturn() {
         try {
-            LinkedBuffer buffer = LinkedBuffer.allocate(SerializationConfigurationEnum.PROTOSTUFF_BUFFER_SIZE.getValue());
             return ProtostuffIOUtil.toByteArray(this.object, this.schema, this.buffer);
         } catch (Exception e) {
             LogUtil.logError(ProtoStuffObjectOutput.class, LogTipEnum.SERIALIZATION_ERROR_TIP + e.getMessage());
