@@ -41,6 +41,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
         in.readBytes(data);
         ObjectInput input = SerializerFactory.getDeserializer(genericClass, data);
         Object obj = input.readObject(genericClass);
+        LogUtil.logInfo(this.getClass(), String.format("deserialization object: %s", obj));
         out.add(obj);
     }
 }
