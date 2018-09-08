@@ -12,11 +12,14 @@ public class ConsumerSample {
 
     public static void main(String[] args) {
         ITestService service = RPCClient.getProxy("testService", ITestService.class);
+        long startTime = System.currentTimeMillis();
         System.out.println(service.testService(1));
         System.out.println(service.testService(2));
         System.out.println(service.testService(3));
         System.out.println(service.testService1("a"));
         System.out.println(service.testService1("b"));
         System.out.println(service.testService1("c"));
+        long endTime = System.currentTimeMillis();
+        System.out.println(String.format("used time: %s", endTime - startTime));
     }
 }
