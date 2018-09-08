@@ -50,7 +50,7 @@ public class ZKServiceRegistry implements ServiceRegistry {
 
     @Override
     public void unRegisterService(String serviceName, String serverAddress) {
-        if (serverAddress != null) { 
+        if (serverAddress != null) {
             try {
                 //if no service name node, create one
                 if (serviceName != null && !serviceName.isEmpty() && zkClient.checkExists().forPath(ZooKeeperConfigurationEnum.ZK_REGISTRY_PATH.getValue() + SeparatorEnum.URL_SEPARATOR.getValue() + serviceName) != null) {
