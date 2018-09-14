@@ -12,8 +12,8 @@ public class ConsumerSample {
 
     public static void main(String[] args) {
         ITestService service = RPCClient.getProxy("testService", ITestService.class);
-        long startTime = System.currentTimeMillis();
         System.out.println(service.testService(1));
+        long startTime = System.currentTimeMillis();
         System.out.println(service.testService(2));
         System.out.println(service.testService(3));
         System.out.println(service.testService1("a"));
