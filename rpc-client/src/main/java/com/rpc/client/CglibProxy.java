@@ -18,10 +18,17 @@ public class CglibProxy<T> extends AbstractProxyHandler implements MethodInterce
     private ServiceDiscovery serviceDiscovery = new ZKServiceDiscovery();
     private Enhancer enhancer = new Enhancer();
     private T target;
+    private String serverAddress;
 
-    public CglibProxy(T target, String serviceName) {
+    CglibProxy(T target, String serviceName) {
         this.target = target;
         this.serviceName = serviceName;
+    }
+
+    CglibProxy(T target, String serviceName, String serverAddress) {
+        this.target = target;
+        this.serviceName = serviceName;
+        this.serverAddress = serverAddress;
     }
 
     public Object getProxy() {
@@ -32,6 +39,6 @@ public class CglibProxy<T> extends AbstractProxyHandler implements MethodInterce
 
     public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         //cglib dynamic proxy to send request to server side
-        return this.callService(method, args, serviceName, serviceDiscovery);
+        return this.callService(method, args, serviceName, serviceDiscovery, serverAddress);
     }
 }

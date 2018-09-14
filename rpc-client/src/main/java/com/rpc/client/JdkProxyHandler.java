@@ -1,6 +1,8 @@
 package com.rpc.client;
 
+import com.rpc.common.util.StringUtil;
 import com.rpc.registry.api.ServiceDiscovery;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -13,14 +15,21 @@ import java.lang.reflect.Method;
 public class JdkProxyHandler extends AbstractProxyHandler implements InvocationHandler {
     private String serviceName;
     private ServiceDiscovery serviceDiscovery;
+    private String serverAddress;
 
-    public JdkProxyHandler(String serviceName, ServiceDiscovery serviceDiscovery) {
+    JdkProxyHandler(String serviceName, ServiceDiscovery serviceDiscovery) {
         this.serviceName = serviceName;
         this.serviceDiscovery = serviceDiscovery;
     }
 
+    JdkProxyHandler(String serviceName, ServiceDiscovery serviceDiscovery, String serverAddress) {
+        this.serviceName = serviceName;
+        this.serviceDiscovery = serviceDiscovery;
+        this.serverAddress = serverAddress;
+    }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        return this.callService(method, args, serviceName, serviceDiscovery);
+        return this.callService(method, args, serviceName, serviceDiscovery, serverAddress);
     }
 }
