@@ -20,12 +20,12 @@ public class CglibProxy<T> extends AbstractProxyHandler implements MethodInterce
     private T target;
     private String serverAddress;
 
-    CglibProxy(T target, String serviceName) {
+    public CglibProxy(T target, String serviceName) {
         this.target = target;
         this.serviceName = serviceName;
     }
 
-    CglibProxy(T target, String serviceName, String serverAddress) {
+    public CglibProxy(T target, String serviceName, String serverAddress) {
         this.target = target;
         this.serviceName = serviceName;
         this.serverAddress = serverAddress;

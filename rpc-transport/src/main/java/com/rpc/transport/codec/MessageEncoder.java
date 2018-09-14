@@ -21,6 +21,7 @@ public class MessageEncoder extends MessageToByteEncoder {
         this.genericClass = genericClass;
     }
 
+    @SuppressWarnings("unchecked")
     protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
         //serialization
         if (genericClass.isInstance(msg)) {

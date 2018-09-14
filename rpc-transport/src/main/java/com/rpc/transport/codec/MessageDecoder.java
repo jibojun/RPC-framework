@@ -22,6 +22,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
         this.genericClass = genericClass;
     }
 
+    @SuppressWarnings("unchecked")
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         //mark index
         in.markReaderIndex();
