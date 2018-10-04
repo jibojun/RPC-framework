@@ -1,8 +1,6 @@
 package com.rpc.client;
 
-import com.rpc.common.util.StringUtil;
 import com.rpc.registry.api.ServiceDiscovery;
-import org.springframework.util.StringUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

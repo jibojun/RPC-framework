@@ -4,7 +4,6 @@ import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.configuration.SeparatorEnum;
 import com.rpc.common.configuration.ZooKeeperConfigurationEnum;
 import com.rpc.common.util.LogUtil;
-import com.rpc.common.util.StringUtil;
 import com.rpc.registry.api.ServiceDiscovery;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
@@ -12,7 +11,6 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

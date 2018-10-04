@@ -4,7 +4,6 @@ import com.rpc.common.configuration.LogTipEnum;
 import com.rpc.common.util.LogUtil;
 import com.rpc.common.rpc.RPCRequest;
 import com.rpc.common.rpc.RPCResponse;
-import com.rpc.common.util.StringUtil;
 import com.rpc.registry.api.ServiceDiscovery;
 import com.rpc.transport.client.ClientDataHandler;
 import org.springframework.util.StringUtils;
